@@ -25,12 +25,13 @@
 ## 3. API Foundation
 
 - [ ] 3.1 Install Fastify API dependencies: `fastify`, `@fastify/cors`, `@fastify/jwt`, `@fastify/swagger`, `@fastify/swagger-ui`, `zod`, `prisma`, `@prisma/client`, `bcryptjs`, `pino`, `nanoid`, and `@casecellshop/shared`.
-- [ ] 3.2 Configure API `tsconfig.json` extending `@casecellshop/tsconfig/node.json`, Jest config, scripts, and source/test directory layout.
+- [ ] 3.2 Configure API `tsconfig.json` extending `@casecellshop/tsconfig/node.json`, Jest config, scripts, and the source directory layout following the `<module>/controllers`, `<module>/routes`, `<module>/services`, `<module>/models`, `<module>/utils` convention.
 - [ ] 3.3 Implement `buildApp(dependencies)` in `app.ts` and keep network startup isolated in `server.ts`.
 - [ ] 3.4 Add common success and error response types by importing `ApiSuccessResponse`, `ApiErrorResponse`, and `AppErrorCode` from `@casecellshop/shared` — do not duplicate these types locally.
-- [ ] 3.5 Add a global Fastify error handler that maps validation and known domain errors to the standard error envelope with `traceId`.
-- [ ] 3.6 Add request ID, logger, JWT auth, and Prisma Fastify plugins.
-- [ ] 3.7 Add route registration modules for auth, products, and orders without embedding business logic in controllers.
+- [ ] 3.5 Add `common/errors/app-error.ts` with the base `AppError` class and `common/errors/error-handler.ts` with the global Fastify error handler that maps validation and known domain errors to the standard error envelope with `traceId`.
+- [ ] 3.6 Add Fastify plugins under `common/plugins/`: request-ID, Pino logger, JWT auth guard, and Prisma client.
+- [ ] 3.7 Add `common/logging/logger.ts` as a Pino factory shared by all modules.
+- [ ] 3.8 Register route modules for auth, products, and orders through the app factory without embedding business logic in controllers.
 
 ## 4. Database and Seed Data
 
@@ -43,47 +44,52 @@
 
 ## 5. Product Catalog API
 
-- [ ] 5.1 Implement product repository methods for list, detail lookup, and persisted stock reads.
-- [ ] 5.2 Use `ProductListItemDto` and `ProductDetailDto` from `@casecellshop/shared` as response DTO types; import `createProductDetailSchema` or equivalent schemas from the shared package for param validation.
-- [ ] 5.3 Implement `GET /products` with public access and message `Products loaded successfully.`.
-- [ ] 5.4 Implement `GET /products/:productId` with public access and message `Product loaded successfully.`.
-- [ ] 5.5 Return `PRODUCT_NOT_FOUND` (using the code from `@casecellshop/shared`) for missing product detail requests.
-- [ ] 5.6 Add product controller tests with mocked repository/use case dependencies.
+- [ ] 5.1 Create `modules/products/models/product.repository.ts` with repository methods for list, detail lookup, and persisted stock reads.
+- [ ] 5.2 Create `modules/products/models/product.types.ts` for internal product types not exported from `@casecellshop/shared`.
+- [ ] 5.3 Create `modules/products/services/products.service.ts` that wraps the repository and returns `ProductListItemDto` and `ProductDetailDto` from `@casecellshop/shared`.
+- [ ] 5.4 Create `modules/products/controllers/products.controller.ts` that delegates to the service and writes the standard success envelope.
+- [ ] 5.5 Create `modules/products/routes/products.routes.ts` that registers `GET /products` and `GET /products/:productId` with public access.
+- [ ] 5.6 Return `PRODUCT_NOT_FOUND` (using the code from `@casecellshop/shared`) for missing product detail requests.
+- [ ] 5.7 Add product controller tests that mock the service and assert HTTP status and response body.
 
 ## 6. Authentication API
 
-- [ ] 6.1 Implement auth repository or service lookup for users by email.
-- [ ] 6.2 Implement password verification with bcrypt and JWT issuance.
-- [ ] 6.3 Implement `POST /auth/login` using `loginRequestSchema` from `@casecellshop/shared` for body validation and `LoginResponseDto` for the typed success response.
-- [ ] 6.4 Return `INVALID_CREDENTIALS` (code from `@casecellshop/shared`) for failed login attempts.
-- [ ] 6.5 Implement auth guard behavior that returns `AUTH_REQUIRED` for unauthenticated `POST /orders` requests.
-- [ ] 6.6 Add auth controller and service tests for success, invalid credentials, and protected route access.
+- [ ] 6.1 Create `modules/auth/models/auth.repository.ts` with a method to look up a user by email.
+- [ ] 6.2 Create `modules/auth/models/auth.types.ts` for internal auth/user types.
+- [ ] 6.3 Create `modules/auth/utils/token.utils.ts` for JWT sign/verify helpers.
+- [ ] 6.4 Create `modules/auth/services/auth.service.ts` that verifies passwords with bcrypt and issues JWTs using token utils.
+- [ ] 6.5 Create `modules/auth/controllers/auth.controller.ts` that calls the service and returns the standard success envelope using `loginRequestSchema` from `@casecellshop/shared`.
+- [ ] 6.6 Create `modules/auth/routes/auth.routes.ts` that registers `POST /auth/login`.
+- [ ] 6.7 Return `INVALID_CREDENTIALS` (code from `@casecellshop/shared`) for failed login attempts.
+- [ ] 6.8 Implement auth guard behavior via `common/plugins/auth.plugin.ts` that returns `AUTH_REQUIRED` for unauthenticated `POST /orders` requests.
+- [ ] 6.9 Add auth controller and service tests for success, invalid credentials, and protected route access.
 
 ## 7. Checkout Orders API
 
-- [ ] 7.1 Define order domain types, status types, DTOs, and checkout-specific domain errors — import `OrderStatus`, `CreateOrderRequest`, `CreateOrderResponse`, and `APP_ERROR_CODES` from `@casecellshop/shared` instead of redeclaring them locally.
-- [ ] 7.2 Validate create order body using `createOrderRequestSchema` from `@casecellshop/shared`; validate the required `Idempotency-Key` header separately in the controller.
-- [ ] 7.3 Implement deterministic request normalization and hashing for idempotency comparisons.
-- [ ] 7.4 Implement idempotency repository methods to find and create records by authenticated user and key.
-- [ ] 7.5 Implement product stock reservation with a single atomic PostgreSQL update inside the order transaction.
-- [ ] 7.6 Implement stock release and reserved-stock consumption repository operations.
-- [ ] 7.7 Implement order repository methods to create orders/items, find by ID, fetch idempotent order results, and update statuses.
-- [ ] 7.8 Implement `CreateOrderUseCase` for auth context, validation, idempotency, stock reservation, order persistence, and result mapping.
-- [ ] 7.9 Return existing order data when the same user repeats the same idempotency key and equivalent payload.
-- [ ] 7.10 Return `DUPLICATE_ORDER_CONFLICT` when the same user reuses an idempotency key with different payload data.
-- [ ] 7.11 Return `STOCK_INSUFFICIENT` without creating an order when atomic reservation returns no row.
-- [ ] 7.12 Implement fake ERP gateway outcomes for confirmed, delayed, and temporary failure cases with deterministic test controls.
-- [ ] 7.13 Implement in-process pending-order worker for confirmation, temporary failure retry state, expiration, stock consumption, and stock release.
-- [ ] 7.14 Implement `POST /orders` route with `201 CONFIRMED`, `202 PENDING_ERP`, and known error responses.
-- [ ] 7.15 Emit structured checkout logs for receipt, idempotency result, stock reservation, ERP processing, and status updates.
+- [ ] 7.1 Create `modules/orders/models/order.types.ts` with internal order types — import `OrderStatus`, `CreateOrderRequest`, `CreateOrderResponse`, and `APP_ERROR_CODES` from `@casecellshop/shared` instead of redeclaring them.
+- [ ] 7.2 Create `modules/orders/models/order.repository.ts` with methods to create orders/items, find by ID, fetch idempotent order results, and update statuses.
+- [ ] 7.3 Create `modules/orders/models/idempotency.repository.ts` with methods to find and create idempotency records by authenticated user and key.
+- [ ] 7.4 Create `modules/orders/utils/request-hash.utils.ts` for deterministic request normalization and hashing used by idempotency comparisons.
+- [ ] 7.5 Validate create order body using `createOrderRequestSchema` from `@casecellshop/shared` in `modules/orders/routes/orders.routes.ts`; validate the required `Idempotency-Key` header separately in the controller.
+- [ ] 7.6 Create `modules/products/models/product.repository.ts` stock mutation methods: atomic reservation, release, and consumption inside PostgreSQL transactions.
+- [ ] 7.7 Create `modules/orders/services/create-order.service.ts` implementing: auth context, idempotency lookup, stock reservation transaction, order/item persistence, idempotency record creation, and ERP dispatch.
+- [ ] 7.8 Return existing order data when the same user repeats the same idempotency key and equivalent payload.
+- [ ] 7.9 Return `DUPLICATE_ORDER_CONFLICT` when the same user reuses an idempotency key with different payload data.
+- [ ] 7.10 Return `STOCK_INSUFFICIENT` without creating an order when atomic reservation returns no row.
+- [ ] 7.11 Create `modules/erp/services/fake-erp.service.ts` with confirmed, delayed, and temporary failure outcomes controlled by deterministic test flags.
+- [ ] 7.12 Create `common/worker/pending-orders.worker.ts` with an interval-based processor that confirms, temporarily fails, expires, or releases stock for pending orders.
+- [ ] 7.13 Create `modules/orders/controllers/orders.controller.ts` that delegates to `create-order.service.ts` and maps results to `201 CONFIRMED`, `202 PENDING_ERP`, or known error responses.
+- [ ] 7.14 Create `modules/orders/routes/orders.routes.ts` that registers `POST /orders` with the JWT auth guard.
+- [ ] 7.15 Emit structured checkout logs from the service layer for receipt, idempotency result, stock reservation, ERP processing, and status updates.
 
 ## 8. Order Status API
 
-- [ ] 8.1 Implement `GetOrderStatusUseCase` that returns status, status message, and timestamps without sensitive user data; use `OrderStatus` from `@casecellshop/shared` for the status field type.
-- [ ] 8.2 Implement status message mapping for pending, confirmed, failed temporary, expired, cancelled, and rejected stock states.
-- [ ] 8.3 Implement `GET /orders/:orderId` with message `Order status loaded successfully.`.
-- [ ] 8.4 Return `ORDER_NOT_FOUND` for unknown order IDs.
-- [ ] 8.5 Add order status controller and use case tests for known statuses and missing orders.
+- [ ] 8.1 Create `modules/orders/services/get-order-status.service.ts` that looks up an order by ID and returns status, status message, and timestamps without sensitive user data; use `OrderStatus` from `@casecellshop/shared` for the status field type.
+- [ ] 8.2 Implement status message mapping inside the service for pending, confirmed, failed temporary, expired, cancelled, and rejected stock states.
+- [ ] 8.3 Create `modules/orders/controllers/order-status.controller.ts` (or extend the existing controller) for `GET /orders/:orderId`.
+- [ ] 8.4 Register the route in `modules/orders/routes/orders.routes.ts` with message `Order status loaded successfully.`.
+- [ ] 8.5 Return `ORDER_NOT_FOUND` for unknown order IDs.
+- [ ] 8.6 Add order status controller and service tests for known statuses and missing orders.
 
 ## 9. Backend Integration and Concurrency Tests
 
@@ -99,39 +105,46 @@
 ## 10. Web Foundation
 
 - [ ] 10.1 Initialize the React and TypeScript Vite app with test tooling and snapshot support.
-- [ ] 10.2 Configure web scripts, TypeScript config extending `@casecellshop/tsconfig/react.json`, Vite config, and test environment.
-- [ ] 10.3 Implement API client helpers for standard success and error envelopes using `ApiSuccessResponse` and `ApiErrorResponse` from `@casecellshop/shared`.
-- [ ] 10.4 Implement product, auth, order creation, and order status API client modules typed with DTOs from `@casecellshop/shared`.
-- [ ] 10.5 Implement shared async state types for `idle`, `loading`, `success`, and `error`.
-- [ ] 10.6 Add CSS variables and layout styles matching the small modern storefront visual direction.
+- [ ] 10.2 Configure web scripts, TypeScript config extending `@casecellshop/tsconfig/react.json`, Vite config, and the test environment.
+- [ ] 10.3 Install and configure **Tailwind CSS v3**: add `tailwindcss`, `postcss`, and `autoprefixer`; create `tailwind.config.ts` with the `theme.extend.colors` map for `background`, `surface`, `primary`, `primary-dark`, `accent`, `danger`, `success`, `text-base`, `muted`, and `border-base`; add `@tailwind` directives to `src/index.css`.
+- [ ] 10.4 Create `src/services/http-client.ts` with the base fetch wrapper and typed `ApiSuccessResponse`/`ApiErrorResponse` from `@casecellshop/shared`.
+- [ ] 10.5 Create `src/services/products.service.ts`, `src/services/orders.service.ts`, and `src/services/auth.service.ts` as API communication modules typed with DTOs from `@casecellshop/shared`.
+- [ ] 10.6 Create `src/services/error-mapper.ts` that translates `APP_ERROR_CODES` from `@casecellshop/shared` into user-facing messages.
+- [ ] 10.7 Create `src/hooks/useAsync.ts` with the shared `AsyncState<T>` discriminated union type and hook.
+- [ ] 10.8 Create `src/utils/idempotency.utils.ts` for idempotency key generation and retry-reuse logic.
+- [ ] 10.9 Create `src/components/ui/Button.tsx`, `Badge.tsx`, `Input.tsx`, `Card.tsx`, and `Spinner.tsx` as primitive common components styled with Tailwind utility classes.
 
 ## 11. Web Product, Auth, and Checkout UI
 
-- [ ] 11.1 Implement product list loading, recoverable product loading errors, and responsive product cards.
-- [ ] 11.2 Implement quantity selector behavior that blocks zero, negative, and non-integer quantities.
-- [ ] 11.3 Implement login form and token handling for checkout requests.
-- [ ] 11.4 Implement idempotency key lifecycle with one key per checkout attempt and reuse for retries of the same attempt.
-- [ ] 11.5 Implement checkout button loading state and authenticated `POST /orders` submission.
-- [ ] 11.6 Implement feedback for confirmed orders with status link or action.
-- [ ] 11.7 Implement feedback for pending ERP orders with status link or action.
-- [ ] 11.8 Implement recoverable feedback for validation, auth, stock, duplicate, temporary failure, and internal errors using `APP_ERROR_CODES` from `@casecellshop/shared` as the mapping source.
-- [ ] 11.9 Refresh or offer to refresh product stock after stock-related checkout failures.
+- [ ] 11.1 Create `src/features/products/hooks/useProducts.ts` using `useAsync` to load and expose product list state.
+- [ ] 11.2 Create `src/features/products/components/ProductCard.tsx` and `ProductGrid.tsx` styled with Tailwind, using `ProductListItemDto` from `@casecellshop/shared` as prop types.
+- [ ] 11.3 Create `src/routes/products.route.tsx` as the product list page that composes `ProductGrid` with loading and recoverable error states.
+- [ ] 11.4 Create `src/features/checkout/hooks/useIdempotencyKey.ts` that generates one stable key per checkout attempt and reuses it on retry.
+- [ ] 11.5 Create `src/features/checkout/hooks/useCheckout.ts` that manages checkout async state using `useAsync` and calls `orders.service.ts`.
+- [ ] 11.6 Create `src/features/checkout/components/QuantitySelector.tsx` that blocks zero, negative, and non-integer quantities.
+- [ ] 11.7 Create `src/features/checkout/components/CheckoutPanel.tsx` that renders the quantity selector, checkout `Button`, and loading state during submission.
+- [ ] 11.8 Create `src/features/checkout/components/FeedbackMessage.tsx` that renders recoverable messages for confirmed, pending, validation, auth, stock, duplicate, temporary failure, and internal error states using error codes from `APP_ERROR_CODES`.
+- [ ] 11.9 Create `src/features/auth/hooks/useAuth.ts` for login state and token storage.
+- [ ] 11.10 Create `src/features/auth/components/LoginForm.tsx` styled with Tailwind.
+- [ ] 11.11 Create `src/routes/login.route.tsx` as the login page.
+- [ ] 11.12 Refresh or offer to refresh product stock after stock-related checkout failures.
 
 ## 12. Web Order Status UI
 
-- [ ] 12.1 Implement order status view or route that loads `GET /orders/:orderId`.
-- [ ] 12.2 Implement status badges for `PENDING_ERP`, `CONFIRMED`, `FAILED_TEMPORARY`, `EXPIRED`, `REJECTED_STOCK`, and `CANCELLED` using `OrderStatus` from `@casecellshop/shared` as the type source.
-- [ ] 12.3 Implement not-found and generic error states for order status lookup.
-- [ ] 12.4 Verify failed web requests remain renderable and interactive where recovery is possible.
+- [ ] 12.1 Create `src/features/order-status/hooks/useOrderStatus.ts` using `useAsync` to load order status by ID.
+- [ ] 12.2 Create `src/features/order-status/components/StatusBadge.tsx` using Tailwind utility classes for `PENDING_ERP`, `CONFIRMED`, `FAILED_TEMPORARY`, `EXPIRED`, `REJECTED_STOCK`, and `CANCELLED` — typed with `OrderStatus` from `@casecellshop/shared`.
+- [ ] 12.3 Create `src/features/order-status/components/OrderStatusView.tsx` that renders status, status message, timestamps, and the `StatusBadge`.
+- [ ] 12.4 Create `src/routes/order-status.route.tsx` as the order status page with not-found and generic error states.
+- [ ] 12.5 Verify failed web requests remain renderable and interactive where recovery is possible.
 
 ## 13. Frontend Tests
 
-- [ ] 13.1 Add unit tests for API error mapping to user-facing messages; verify the mapper covers every key in `APP_ERROR_CODES` from `@casecellshop/shared`.
-- [ ] 13.2 Add unit tests for idempotency key generation and retry reuse behavior.
-- [ ] 13.3 Add unit tests for order status badge/message mapping using `OrderStatus` values from `@casecellshop/shared`.
-- [ ] 13.4 Add unit tests for quantity validation and submit blocking.
-- [ ] 13.5 Add snapshot tests for product card with available stock and zero stock.
-- [ ] 13.6 Add snapshot tests for checkout loading, confirmed success, insufficient stock, pending processing, and temporary failure states.
+- [ ] 13.1 Add unit tests for `src/services/error-mapper.ts` verifying the mapper covers every key in `APP_ERROR_CODES` from `@casecellshop/shared`.
+- [ ] 13.2 Add unit tests for `src/utils/idempotency.utils.ts` for key generation and retry-reuse behavior.
+- [ ] 13.3 Add unit tests for `src/features/order-status/components/StatusBadge.tsx` badge rendering for each `OrderStatus` value from `@casecellshop/shared`.
+- [ ] 13.4 Add unit tests for `src/features/checkout/components/QuantitySelector.tsx` quantity validation and submit blocking.
+- [ ] 13.5 Add snapshot tests for `ProductCard` with available stock and zero stock.
+- [ ] 13.6 Add snapshot tests for `CheckoutPanel` loading, `FeedbackMessage` confirmed success, insufficient stock, pending processing, and temporary failure states.
 - [ ] 13.7 Run `pnpm turbo run test typecheck lint --filter=web` and confirm all pass.
 
 ## 14. Documentation and Final Verification

@@ -1,5 +1,37 @@
 ## ADDED Requirements
 
+### Requirement: Styling with Tailwind CSS
+The web app SHALL use Tailwind CSS v3 for all visual styling. Design tokens (colors, spacing, border radius) SHALL be declared in `tailwind.config.ts` under `theme.extend` and referenced through Tailwind utility classes in component markup.
+
+#### Scenario: Components use Tailwind utility classes
+- **WHEN** a UI component is implemented
+- **THEN** all visual styles are applied through Tailwind utility classes with no separate per-component CSS file or inline style objects.
+
+#### Scenario: Design tokens are co-located with Tailwind config
+- **WHEN** the color palette is referenced
+- **THEN** the canonical values are found in `tailwind.config.ts` under `theme.extend.colors` and not in a separate CSS custom property file.
+
+### Requirement: Primitive common UI components
+The web app SHALL provide primitive reusable components (`Button`, `Badge`, `Input`, `Card`, `Spinner`) in `src/components/ui/` styled with Tailwind and consumed across features without duplication.
+
+#### Scenario: Common components are shared
+- **WHEN** multiple features require the same visual element (e.g., a button or badge)
+- **THEN** both features import it from `src/components/ui/` rather than redefining the element.
+
+### Requirement: Feature-scoped hooks for async state
+The web app SHALL place data-fetching and state logic in `hooks/` folders inside each feature (`features/<name>/hooks/`) backed by a shared `useAsync` hook in `src/hooks/`.
+
+#### Scenario: Hooks isolate service calls
+- **WHEN** a feature component needs to fetch data or submit a request
+- **THEN** it calls a feature hook rather than calling `src/services/` directly from component code.
+
+### Requirement: Services folder for API communication
+The web app SHALL place all API communication in `src/services/` with one file per resource (`products.service.ts`, `orders.service.ts`, `auth.service.ts`) and a shared `http-client.ts` and `error-mapper.ts`.
+
+#### Scenario: Components do not import fetch directly
+- **WHEN** a hook needs to communicate with the API
+- **THEN** it imports from `src/services/` and not from `fetch`, `axios`, or any other HTTP primitive directly.
+
 ### Requirement: Product browsing UI
 The web app SHALL display products returned by the API in a responsive product grid with product name, model, available stock, price, and quantity controls.
 
@@ -83,8 +115,8 @@ The web app SHALL provide an order status view with visual badges for order stat
 - **THEN** the UI displays a not-found state without crashing.
 
 ### Requirement: Explicit frontend request states
-The web app SHALL represent async operations with explicit `idle`, `loading`, `success`, and `error` states.
+The web app SHALL represent async operations with explicit `idle`, `loading`, `success`, and `error` states using the `useAsync` hook and `AsyncState<T>` discriminated union.
 
 #### Scenario: Failed request remains renderable
 - **WHEN** any API request fails
-- **THEN** the corresponding component renders an error state and remains interactive where recovery is possible.
+- **THEN** the corresponding component renders an error state using Tailwind-styled error UI and remains interactive where recovery is possible.

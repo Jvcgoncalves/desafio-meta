@@ -35,9 +35,9 @@ The shared communication contract between API and frontend lives exclusively in 
    - Alternative considered: Duplicate types in each app. Rejected because type drift between API responses and frontend expectations is a common source of silent bugs.
    - Contract stability rule: any change to `packages/shared` must pass `pnpm turbo run typecheck` and `pnpm turbo run test` before merging.
 
-3. Use Fastify with an app factory and route modules.
-   - Rationale: `buildApp(dependencies)` supports isolated HTTP tests through `fastify.inject()` and keeps startup concerns in `server.ts`.
-   - Alternative considered: Start the server directly from the app module. Rejected because it makes controller tests harder and couples tests to network ports.
+3. Use Fastify with an app factory and route modules, with each module following a `controllers/routes/services/models/utils` internal layout.
+   - Rationale: `buildApp(dependencies)` supports isolated HTTP tests through `fastify.inject()` and keeps startup concerns in `server.ts`. The sub-folder layout makes responsibility boundaries visible by file path: controllers never contain business logic, services never import Fastify types, repositories live in `models/`, and module-scoped pure helpers live in `utils/`. The `common/` folder holds cross-module API concerns (error handler, plugins, logger, worker) that are not owned by any single module.
+   - Alternative considered: Start the server directly from the app module and keep all module files flat. Rejected because flat layout obscures responsibility boundaries as the module grows.
 
 4. Use PostgreSQL and Prisma for persistence, with raw/transactional SQL where atomic stock updates need database guarantees.
    - Rationale: Prisma gives maintainable schema and repository code, while the stock reservation operation must use an atomic conditional update inside a transaction.
@@ -63,7 +63,11 @@ The shared communication contract between API and frontend lives exclusively in 
    - Rationale: Both `apps/api` and `apps/web` need access to `packages/shared` source and `pnpm-lock.yaml` during install and build. Building from the app subdirectory would exclude the shared package.
    - Alternative considered: Copy shared package into each app directory. Rejected because it creates duplication and breaks the single-source contract guarantee.
 
-10. Use explicit frontend async state objects.
+10. Use Tailwind CSS v3 for frontend styling with design tokens declared in `tailwind.config.ts`.
+    - Rationale: Tailwind provides consistent utility classes without a separate design token file. All color, spacing, and border-radius tokens live in `theme.extend` inside `tailwind.config.ts`, making the design system co-located with the build config and instantly discoverable. Components apply classes directly, keeping styles close to markup without a separate CSS file per component.
+    - Alternative considered: Plain CSS variables in a `tokens.css` file. Rejected because it requires maintaining a second source of truth for design decisions and does not give the responsive-utility classes needed for the product grid layout.
+
+11. Use explicit frontend async state objects.
    - Rationale: A discriminated state model (`idle`, `loading`, `success`, `error`) avoids scattered booleans and guarantees every failed request returns to a renderable state.
    - Alternative considered: Component-local `isLoading` and `error` booleans everywhere. Rejected because complex flows become easier to freeze or desynchronize.
 
@@ -77,6 +81,7 @@ The shared communication contract between API and frontend lives exclusively in 
 - Docker startup can race migrations, seed, and API readiness → Provide explicit migration/seed commands and document the expected local run sequence.
 - Shared package changes break both apps simultaneously → This is intentional and desirable; cover shared schema changes with type checks and schema tests before updating apps.
 - `packages/shared` must never import from `apps/api` or `apps/web` → Enforce this with a dependency check in tests and document it as a monorepo guardrail.
+- Sub-folder module layout increases the number of files per module → This is intentional; more files with narrow responsibilities are easier to test and extend than fewer large files with mixed concerns.
 
 ## Migration Plan
 

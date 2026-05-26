@@ -37,15 +37,15 @@ The API SHALL include unit tests for controllers and use cases, integration test
 - **THEN** exactly one request succeeds and exactly one request returns `STOCK_INSUFFICIENT`.
 
 ### Requirement: Frontend automated tests
-The web app SHALL include unit tests for handlers/classes and snapshot tests for key UI states.
+The web app SHALL include unit tests for service functions, hooks, and utility functions, and snapshot tests for key UI states. All tests run through `pnpm turbo run test --filter=web`.
 
-#### Scenario: Frontend handlers are tested
+#### Scenario: Frontend services and hooks are tested
 - **WHEN** frontend unit tests run
-- **THEN** API error mapping, idempotency key handling, order status mapping, and quantity validation are covered.
+- **THEN** `error-mapper.ts` coverage of every `APP_ERROR_CODES` key, `idempotency.utils.ts` key generation and reuse, `StatusBadge` rendering for all `OrderStatus` values, and `QuantitySelector` validation are covered.
 
 #### Scenario: UI snapshots are tested
 - **WHEN** frontend snapshot tests run
-- **THEN** product cards, loading checkout, success feedback, insufficient stock feedback, processing feedback, and temporary failure feedback are covered.
+- **THEN** `ProductCard` (available stock and zero stock), `CheckoutPanel` loading, `FeedbackMessage` confirmed success, insufficient stock feedback, pending processing feedback, and temporary failure feedback are covered.
 
 ### Requirement: Structured observability
 The API SHALL use structured logs with request trace IDs for checkout and status operations.
