@@ -1,0 +1,34 @@
+digraph G {
+  rankdir=TB;
+  node [shape=box, style="rounded", fontname="Arial"];
+  start [shape=oval, label="User opens app"];
+  products [label="View product list"];
+  select [label="Select phone case"];
+  qty [label="Choose quantity"];
+  login [label="Logged in?"];
+  loginPage [label="Login"];
+  submit [label="Click create order"];
+  loading [label="Button disabled + loading"];
+  result [label="API response"];
+  success [label="Show confirmed order"];
+  processing [label="Show processing message"];
+  validation [label="Show field message"];
+  stock [label="Show stock error + reload products"];
+  duplicate [label="Show existing order or conflict"];
+  failure [label="Show retry/status action"];
+  status [label="Check order status"];
+  start -> products -> select -> qty -> login;
+  login -> loginPage [label="No"];
+  loginPage -> qty;
+  login -> submit [label="Yes"];
+  submit -> loading -> result;
+  result -> success;
+  result -> processing;
+  result -> validation;
+  result -> stock;
+  result -> duplicate;
+  result -> failure;
+  success -> status;
+  processing -> status;
+  failure -> status;
+}

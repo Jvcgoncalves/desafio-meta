@@ -1,26 +1,26 @@
 ## 1. Turborepo Monorepo Setup
 
-- [ ] 1.1 Scaffold the root Turborepo project: create `pnpm-workspace.yaml` listing `apps/*` and `packages/*`, root `package.json` with `turbo`, `typescript`, and `packageManager: pnpm@latest`, and root `turbo.json` with tasks for `build`, `typecheck`, `lint`, `test`, `test:integration`, and `dev`.
-- [ ] 1.2 Create `packages/tsconfig` with `base.json`, `node.json`, and `react.json` TypeScript base configs and a minimal `package.json` exposing them as `@casecellshop/tsconfig`.
-- [ ] 1.3 Initialize `packages/shared` with a `package.json` named `@casecellshop/shared`, a `tsconfig.json` extending `@casecellshop/tsconfig/base.json`, and build/typecheck scripts that compile `src/index.ts` to `dist/`.
-- [ ] 1.4 Initialize `apps/api` with its `package.json` (name `api`) depending on `@casecellshop/shared: workspace:*` and `@casecellshop/tsconfig: workspace:*`.
-- [ ] 1.5 Initialize `apps/web` with its `package.json` (name `web`) depending on `@casecellshop/shared: workspace:*` and `@casecellshop/tsconfig: workspace:*`.
-- [ ] 1.6 Run `pnpm install` from the root and verify `pnpm turbo run typecheck` resolves without errors on an empty workspace.
-- [ ] 1.7 Add Docker Compose services for PostgreSQL, API, and web with Dockerfiles that use the monorepo root as build context so `packages/shared` is available during image build.
-- [ ] 1.8 Add `.gitignore`, environment variable examples, and baseline documentation for monorepo entry commands.
+- [x] 1.1 Scaffold the root Turborepo project: create `pnpm-workspace.yaml` listing `apps/*` and `packages/*`, root `package.json` with `turbo`, `typescript`, and `packageManager: pnpm@latest`, and root `turbo.json` with tasks for `build`, `typecheck`, `lint`, `test`, `test:integration`, and `dev`.
+- [x] 1.2 Create `packages/tsconfig` with `base.json`, `node.json`, and `react.json` TypeScript base configs and a minimal `package.json` exposing them as `@casecellshop/tsconfig`.
+- [x] 1.3 Initialize `packages/shared` with a `package.json` named `@casecellshop/shared`, a `tsconfig.json` extending `@casecellshop/tsconfig/base.json`, and build/typecheck scripts that compile `src/index.ts` to `dist/`.
+- [x] 1.4 Initialize `apps/api` with its `package.json` (name `api`) depending on `@casecellshop/shared: workspace:*` and `@casecellshop/tsconfig: workspace:*`.
+- [x] 1.5 Initialize `apps/web` with its `package.json` (name `web`) depending on `@casecellshop/shared: workspace:*` and `@casecellshop/tsconfig: workspace:*`.
+- [x] 1.6 Run `pnpm install` from the root and verify `pnpm turbo run typecheck` resolves without errors on an empty workspace.
+- [x] 1.7 Add Docker Compose services for PostgreSQL, API, and web with Dockerfiles that use the monorepo root as build context so `packages/shared` is available during image build.
+- [x] 1.8 Add `.gitignore`, environment variable examples, and baseline documentation for monorepo entry commands.
 
 ## 2. Shared Communication Package
 
-- [ ] 2.1 Create `packages/shared/src/errors/app-error-code.ts` with the `APP_ERROR_CODES` constant object and `AppErrorCode` type covering all backend error codes: `VALIDATION_ERROR`, `AUTH_REQUIRED`, `INVALID_CREDENTIALS`, `PRODUCT_NOT_FOUND`, `ORDER_NOT_FOUND`, `IDEMPOTENCY_KEY_REQUIRED`, `DUPLICATE_ORDER_CONFLICT`, `STOCK_INSUFFICIENT`, `ERP_TEMPORARY_FAILURE`, and `INTERNAL_ERROR`.
-- [ ] 2.2 Create `packages/shared/src/api/api-response.ts` with `ApiSuccessResponse<TData>` and `ApiErrorResponse<TDetails>` envelope types that both API and frontend use for typed responses.
-- [ ] 2.3 Create `packages/shared/src/orders/order-status.ts` with the `ORDER_STATUSES` const array and `OrderStatus` union type covering all valid states.
-- [ ] 2.4 Create `packages/shared/src/auth/auth.dto.ts` and `auth.schemas.ts` with the login request DTO and Zod login schema.
-- [ ] 2.5 Create `packages/shared/src/products/product.dto.ts` and `product.schemas.ts` with product list item DTO and product detail DTO.
-- [ ] 2.6 Create `packages/shared/src/orders/order.dto.ts`, `order.schemas.ts` with `createOrderItemSchema`, `createOrderRequestSchema`, `CreateOrderRequest` type, `CreateOrderResponse` type, and order status response DTO.
-- [ ] 2.7 Export all public types and schemas from `packages/shared/src/index.ts`.
-- [ ] 2.8 Build `packages/shared` with `pnpm turbo run build --filter=@casecellshop/shared` and verify `dist/index.js` and `dist/index.d.ts` are generated.
-- [ ] 2.9 Add a schema validation test for `createOrderRequestSchema` covering invalid quantity, empty items array, and invalid UUID to confirm the shared package is testable independently.
-- [ ] 2.10 Verify `packages/shared` has no imports from `apps/api` or `apps/web` to prevent circular dependencies.
+- [x] 2.1 Create `packages/shared/src/errors/app-error-code.ts` with the `APP_ERROR_CODES` constant object and `AppErrorCode` type covering all backend error codes: `VALIDATION_ERROR`, `AUTH_REQUIRED`, `INVALID_CREDENTIALS`, `PRODUCT_NOT_FOUND`, `ORDER_NOT_FOUND`, `IDEMPOTENCY_KEY_REQUIRED`, `DUPLICATE_ORDER_CONFLICT`, `STOCK_INSUFFICIENT`, `ERP_TEMPORARY_FAILURE`, and `INTERNAL_ERROR`.
+- [x] 2.2 Create `packages/shared/src/api/api-response.ts` with `ApiSuccessResponse<TData>` and `ApiErrorResponse<TDetails>` envelope types that both API and frontend use for typed responses.
+- [x] 2.3 Create `packages/shared/src/orders/order-status.ts` with the `ORDER_STATUSES` const array and `OrderStatus` union type covering all valid states.
+- [x] 2.4 Create `packages/shared/src/auth/auth.dto.ts` and `auth.schemas.ts` with the login request DTO and Zod login schema.
+- [x] 2.5 Create `packages/shared/src/products/product.dto.ts` and `product.schemas.ts` with product list item DTO and product detail DTO.
+- [x] 2.6 Create `packages/shared/src/orders/order.dto.ts`, `order.schemas.ts` with `createOrderItemSchema`, `createOrderRequestSchema`, `CreateOrderRequest` type, `CreateOrderResponse` type, and order status response DTO.
+- [x] 2.7 Export all public types and schemas from `packages/shared/src/index.ts`.
+- [x] 2.8 Build `packages/shared` with `pnpm turbo run build --filter=@casecellshop/shared` and verify `dist/index.js` and `dist/index.d.ts` are generated.
+- [x] 2.9 Add a schema validation test for `createOrderRequestSchema` covering invalid quantity, empty items array, and invalid UUID to confirm the shared package is testable independently.
+- [x] 2.10 Verify `packages/shared` has no imports from `apps/api` or `apps/web` to prevent circular dependencies.
 
 ## 3. API Foundation
 

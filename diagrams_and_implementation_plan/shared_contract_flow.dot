@@ -1,0 +1,17 @@
+digraph G {
+  rankdir=LR;
+  node [shape=box, style="rounded", fontname="Arial"];
+  shared [label="packages/shared\nDTOs, Zod schemas, status, error codes"];
+  api_validation [label="API request validation"];
+  api_response [label="API typed responses"];
+  usecase [label="Order use case"];
+  client [label="Frontend HTTP client"];
+  ui [label="UI error/status mapping"];
+  shared -> api_validation;
+  shared -> api_response;
+  shared -> client;
+  shared -> ui;
+  api_validation -> usecase;
+  api_response -> client;
+  client -> ui;
+}

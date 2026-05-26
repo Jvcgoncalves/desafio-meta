@@ -1,0 +1,21 @@
+digraph G {
+  rankdir=LR;
+  node [shape=record, fontname="Arial"];
+  controller [label="{OrdersController|+ createOrder()\l+ getOrderStatus()\l}"];
+  create [label="{CreateOrderUseCase|+ execute(command)\l}"];
+  status [label="{GetOrderStatusUseCase|+ execute(orderId)\l}"];
+  orderPort [label="{OrderRepositoryPort|+ findById()\l+ createOrder()\l+ updateStatus()\l}"];
+  productPort [label="{ProductRepositoryPort|+ findMany()\l+ reserveStock()\l+ releaseReservedStock()\l}"];
+  idemPort [label="{IdempotencyRepositoryPort|+ findByUserAndKey()\l+ create()\l}"];
+  erpPort [label="{ErpGatewayPort|+ processOrder()\l}"];
+  shared [shape=box, style="rounded", label="@casecellshop/shared\nDTOs + schemas + error codes"];
+  controller -> create;
+  controller -> status;
+  create -> orderPort;
+  create -> productPort;
+  create -> idemPort;
+  create -> erpPort;
+  status -> orderPort;
+  controller -> shared;
+  create -> shared;
+}

@@ -1,0 +1,18 @@
+digraph G {
+  rankdir=TB;
+  node [shape=box, style="rounded", fontname="Arial"];
+  root [label="root\npackage.json + turbo.json"];
+  api [label="apps/api\nFastify + PostgreSQL + Prisma"];
+  web [label="apps/web\nReact + TypeScript"];
+  shared [label="packages/shared\nDTOs + schemas + error codes"];
+  tsconfig [label="packages/tsconfig\nshared TypeScript config"];
+  root -> api;
+  root -> web;
+  root -> shared;
+  root -> tsconfig;
+  api -> shared [label="imports"];
+  web -> shared [label="imports"];
+  api -> tsconfig;
+  web -> tsconfig;
+  shared -> tsconfig;
+}
