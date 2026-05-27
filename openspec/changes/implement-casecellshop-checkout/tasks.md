@@ -66,41 +66,41 @@
 
 ## 7. Checkout Orders API
 
-- [ ] 7.1 Create `modules/orders/models/order.types.ts` with internal order types — import `OrderStatus`, `CreateOrderRequest`, `CreateOrderResponse`, and `APP_ERROR_CODES` from `@casecellshop/shared` instead of redeclaring them.
-- [ ] 7.2 Create `modules/orders/models/order.repository.ts` with methods to create orders/items, find by ID, fetch idempotent order results, and update statuses.
-- [ ] 7.3 Create `modules/orders/models/idempotency.repository.ts` with methods to find and create idempotency records by authenticated user and key.
-- [ ] 7.4 Create `modules/orders/utils/request-hash.utils.ts` for deterministic request normalization and hashing used by idempotency comparisons.
-- [ ] 7.5 Validate create order body using `createOrderRequestSchema` from `@casecellshop/shared` in `modules/orders/routes/orders.routes.ts`; validate the required `Idempotency-Key` header separately in the controller.
-- [ ] 7.6 Create `modules/products/models/product.repository.ts` stock mutation methods: atomic reservation, release, and consumption inside PostgreSQL transactions.
-- [ ] 7.7 Create `modules/orders/services/create-order.service.ts` implementing: auth context, idempotency lookup, stock reservation transaction, order/item persistence, idempotency record creation, and ERP dispatch.
-- [ ] 7.8 Return existing order data when the same user repeats the same idempotency key and equivalent payload.
-- [ ] 7.9 Return `DUPLICATE_ORDER_CONFLICT` when the same user reuses an idempotency key with different payload data.
-- [ ] 7.10 Return `STOCK_INSUFFICIENT` without creating an order when atomic reservation returns no row.
-- [ ] 7.11 Create `modules/erp/services/fake-erp.service.ts` with confirmed, delayed, and temporary failure outcomes controlled by deterministic test flags.
-- [ ] 7.12 Create `common/worker/pending-orders.worker.ts` with an interval-based processor that confirms, temporarily fails, expires, or releases stock for pending orders.
-- [ ] 7.13 Create `modules/orders/controllers/orders.controller.ts` that delegates to `create-order.service.ts` and maps results to `201 CONFIRMED`, `202 PENDING_ERP`, or known error responses.
-- [ ] 7.14 Create `modules/orders/routes/orders.routes.ts` that registers `POST /orders` with the JWT auth guard.
-- [ ] 7.15 Emit structured checkout logs from the service layer for receipt, idempotency result, stock reservation, ERP processing, and status updates.
+- [x] 7.1 Create `modules/orders/models/order.types.ts` with internal order types — import `OrderStatus`, `CreateOrderRequest`, `CreateOrderResponse`, and `APP_ERROR_CODES` from `@casecellshop/shared` instead of redeclaring them.
+- [x] 7.2 Create `modules/orders/models/order.repository.ts` with methods to create orders/items, find by ID, fetch idempotent order results, and update statuses.
+- [x] 7.3 Create `modules/orders/models/idempotency.repository.ts` with methods to find and create idempotency records by authenticated user and key.
+- [x] 7.4 Create `modules/orders/utils/request-hash.utils.ts` for deterministic request normalization and hashing used by idempotency comparisons.
+- [x] 7.5 Validate create order body using `createOrderRequestSchema` from `@casecellshop/shared` in `modules/orders/routes/orders.routes.ts`; validate the required `Idempotency-Key` header separately in the controller.
+- [x] 7.6 Create `modules/products/models/product.repository.ts` stock mutation methods: atomic reservation, release, and consumption inside PostgreSQL transactions.
+- [x] 7.7 Create `modules/orders/services/create-order.service.ts` implementing: auth context, idempotency lookup, stock reservation transaction, order/item persistence, idempotency record creation, and ERP dispatch.
+- [x] 7.8 Return existing order data when the same user repeats the same idempotency key and equivalent payload.
+- [x] 7.9 Return `DUPLICATE_ORDER_CONFLICT` when the same user reuses an idempotency key with different payload data.
+- [x] 7.10 Return `STOCK_INSUFFICIENT` without creating an order when atomic reservation returns no row.
+- [x] 7.11 Create `modules/erp/services/fake-erp.service.ts` with confirmed, delayed, and temporary failure outcomes controlled by deterministic test flags.
+- [x] 7.12 Create `common/worker/pending-orders.worker.ts` with an interval-based processor that confirms, temporarily fails, expires, or releases stock for pending orders.
+- [x] 7.13 Create `modules/orders/controllers/orders.controller.ts` that delegates to `create-order.service.ts` and maps results to `201 CONFIRMED`, `202 PENDING_ERP`, or known error responses.
+- [x] 7.14 Create `modules/orders/routes/orders.routes.ts` that registers `POST /orders` with the JWT auth guard.
+- [x] 7.15 Emit structured checkout logs from the service layer for receipt, idempotency result, stock reservation, ERP processing, and status updates.
 
 ## 8. Order Status API
 
-- [ ] 8.1 Create `modules/orders/services/get-order-status.service.ts` that looks up an order by ID and returns status, status message, and timestamps without sensitive user data; use `OrderStatus` from `@casecellshop/shared` for the status field type.
-- [ ] 8.2 Implement status message mapping inside the service for pending, confirmed, failed temporary, expired, cancelled, and rejected stock states.
-- [ ] 8.3 Create `modules/orders/controllers/order-status.controller.ts` (or extend the existing controller) for `GET /orders/:orderId`.
-- [ ] 8.4 Register the route in `modules/orders/routes/orders.routes.ts` with message `Order status loaded successfully.`.
-- [ ] 8.5 Return `ORDER_NOT_FOUND` for unknown order IDs.
-- [ ] 8.6 Add order status controller and service tests for known statuses and missing orders.
+- [x] 8.1 Create `modules/orders/services/get-order-status.service.ts` that looks up an order by ID and returns status, status message, and timestamps without sensitive user data; use `OrderStatus` from `@casecellshop/shared` for the status field type.
+- [x] 8.2 Implement status message mapping inside the service for pending, confirmed, failed temporary, expired, cancelled, and rejected stock states.
+- [x] 8.3 Create `modules/orders/controllers/order-status.controller.ts` (or extend the existing controller) for `GET /orders/:orderId`.
+- [x] 8.4 Register the route in `modules/orders/routes/orders.routes.ts` with message `Order status loaded successfully.`.
+- [x] 8.5 Return `ORDER_NOT_FOUND` for unknown order IDs.
+- [x] 8.6 Add order status controller and service tests for known statuses and missing orders.
 
 ## 9. Backend Integration and Concurrency Tests
 
-- [ ] 9.1 Add test database configuration and helpers for migrations, seed reset, and app injection.
-- [ ] 9.2 Add integration tests for product listing and product detail reads from PostgreSQL.
-- [ ] 9.3 Add integration tests for login with seeded credentials.
-- [ ] 9.4 Add integration tests for successful order creation, persisted order items, and stock reservation.
-- [ ] 9.5 Add idempotency integration tests for same payload replay and different payload conflict.
-- [ ] 9.6 Add a concurrency test where two simultaneous requests compete for one available product unit and only one succeeds.
-- [ ] 9.7 Add tests for ERP delayed and temporary failure behavior.
-- [ ] 9.8 Run `pnpm turbo run test typecheck lint --filter=api` and confirm all pass.
+- [x] 9.1 Add test database configuration and helpers for migrations, seed reset, and app injection.
+- [x] 9.2 Add integration tests for product listing and product detail reads from PostgreSQL.
+- [x] 9.3 Add integration tests for login with seeded credentials.
+- [x] 9.4 Add integration tests for successful order creation, persisted order items, and stock reservation.
+- [x] 9.5 Add idempotency integration tests for same payload replay and different payload conflict.
+- [x] 9.6 Add a concurrency test where two simultaneous requests compete for one available product unit and only one succeeds.
+- [x] 9.7 Add tests for ERP delayed and temporary failure behavior.
+- [x] 9.8 Run `pnpm turbo run test typecheck lint --filter=api` and confirm all pass.
 
 ## 10. Web Foundation
 

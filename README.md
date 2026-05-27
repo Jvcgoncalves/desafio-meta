@@ -52,3 +52,12 @@ docker compose up --build
 ```
 
 Docker images are built from the monorepo root so `apps/*` packages can access `packages/shared` during install and build.
+
+
+## JWT secret generation
+
+Node is required
+
+[node install guide here](https://nodejs.org/en/download)
+
+run in termial `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
