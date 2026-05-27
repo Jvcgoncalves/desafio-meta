@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
     "db:migrate": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "dev": "tsx watch src/server.ts",
@@ -32,10 +32,7 @@
   "devDependencies": {
     "@casecellshop/tsconfig": "workspace:*",
     "@types/bcryptjs": "^3.0.0",
-    "@types/jest": "^30.0.0",
-    "jest": "^30.4.2",
     "prisma": "^6.19.3",
-    "ts-jest": "^29.4.11",
     "tsx": "^4.22.3"
   },
   "prisma": {

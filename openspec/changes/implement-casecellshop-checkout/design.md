@@ -36,7 +36,7 @@ The shared communication contract between API and frontend lives exclusively in 
    - Contract stability rule: any change to `packages/shared` must pass `pnpm turbo run typecheck` and `pnpm turbo run test` before merging.
 
 3. Use Fastify with an app factory and route modules, with each module following a `controllers/routes/services/models/utils` internal layout.
-   - Rationale: `buildApp(dependencies)` supports isolated HTTP tests through `fastify.inject()` and keeps startup concerns in `server.ts`. The sub-folder layout makes responsibility boundaries visible by file path: controllers never contain business logic, services never import Fastify types, repositories live in `models/`, and module-scoped pure helpers live in `utils/`. The `common/` folder holds cross-module API concerns (error handler, plugins, logger, worker) that are not owned by any single module.
+   - Rationale: `buildApp(dependencies)` supports isolated HTTP tests through `fastify.inject()` and keeps startup concerns in `server.ts`. The sub-folder layout makes responsibility boundaries visible by file path: controllers never contain business logic, services never import Fastify types, repositories live in `models/`, and module-scoped pure helpers live in `utils/`. The `common/` folder holds cross-module API concerns (error handler, plugins, logger, worker) that are not owned by any single module. API tests live in `apps/api/tests` and run with Vitest so production module folders stay focused on implementation code.
    - Alternative considered: Start the server directly from the app module and keep all module files flat. Rejected because flat layout obscures responsibility boundaries as the module grows.
 
 4. Use PostgreSQL and Prisma for persistence, with raw/transactional SQL where atomic stock updates need database guarantees.
@@ -70,6 +70,10 @@ The shared communication contract between API and frontend lives exclusively in 
 11. Use explicit frontend async state objects.
    - Rationale: A discriminated state model (`idle`, `loading`, `success`, `error`) avoids scattered booleans and guarantees every failed request returns to a renderable state.
    - Alternative considered: Component-local `isLoading` and `error` booleans everywhere. Rejected because complex flows become easier to freeze or desynchronize.
+
+12. Use Vitest as the test runner for the API package.
+   - Rationale: The monorepo already uses Vitest for shared package tests, and Vitest gives fast ESM-friendly TypeScript tests with less configuration than Jest in this setup.
+   - Alternative considered: Jest with `ts-jest`. Rejected because it duplicates test tooling and adds configuration friction for ESM TypeScript modules.
 
 ## Risks / Trade-offs
 

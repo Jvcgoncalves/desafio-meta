@@ -14,3 +14,9 @@ declare module "fastify" {
     user: AuthenticatedRequestUser;
   }
 }
+declare module "@fastify/jwt" {
+  interface FastifyJWT {
+    payload: AuthenticatedRequestUser;
+    user: AuthenticatedRequestUser;
+  }
+}

@@ -25,7 +25,7 @@
 ## 3. API Foundation
 
 - [x] 3.1 Install Fastify API dependencies: `fastify`, `@fastify/cors`, `@fastify/jwt`, `@fastify/swagger`, `@fastify/swagger-ui`, `zod`, `prisma`, `@prisma/client`, `bcryptjs`, `pino`, `nanoid`, and `@casecellshop/shared`.
-- [x] 3.2 Configure API `tsconfig.json` extending `@casecellshop/tsconfig/node.json`, Jest config, scripts, and the source directory layout following the `<module>/controllers`, `<module>/routes`, `<module>/services`, `<module>/models`, `<module>/utils` convention.
+- [x] 3.2 Configure API `tsconfig.json` extending `@casecellshop/tsconfig/node.json`, Vitest config, scripts, dedicated `tests/` layout, and the source directory layout following the `<module>/controllers`, `<module>/routes`, `<module>/services`, `<module>/models`, `<module>/utils` convention.
 - [x] 3.3 Implement `buildApp(dependencies)` in `app.ts` and keep network startup isolated in `server.ts`.
 - [x] 3.4 Add common success and error response types by importing `ApiSuccessResponse`, `ApiErrorResponse`, and `AppErrorCode` from `@casecellshop/shared` — do not duplicate these types locally.
 - [x] 3.5 Add `common/errors/app-error.ts` with the base `AppError` class and `common/errors/error-handler.ts` with the global Fastify error handler that maps validation and known domain errors to the standard error envelope with `traceId`.
@@ -44,25 +44,25 @@
 
 ## 5. Product Catalog API
 
-- [ ] 5.1 Create `modules/products/models/product.repository.ts` with repository methods for list, detail lookup, and persisted stock reads.
-- [ ] 5.2 Create `modules/products/models/product.types.ts` for internal product types not exported from `@casecellshop/shared`.
-- [ ] 5.3 Create `modules/products/services/products.service.ts` that wraps the repository and returns `ProductListItemDto` and `ProductDetailDto` from `@casecellshop/shared`.
-- [ ] 5.4 Create `modules/products/controllers/products.controller.ts` that delegates to the service and writes the standard success envelope.
-- [ ] 5.5 Create `modules/products/routes/products.routes.ts` that registers `GET /products` and `GET /products/:productId` with public access.
-- [ ] 5.6 Return `PRODUCT_NOT_FOUND` (using the code from `@casecellshop/shared`) for missing product detail requests.
-- [ ] 5.7 Add product controller tests that mock the service and assert HTTP status and response body.
+- [x] 5.1 Create `modules/products/models/product.repository.ts` with repository methods for list, detail lookup, and persisted stock reads.
+- [x] 5.2 Create `modules/products/models/product.types.ts` for internal product types not exported from `@casecellshop/shared`.
+- [x] 5.3 Create `modules/products/services/products.service.ts` that wraps the repository and returns `ProductListItemDto` and `ProductDetailDto` from `@casecellshop/shared`.
+- [x] 5.4 Create `modules/products/controllers/products.controller.ts` that delegates to the service and writes the standard success envelope.
+- [x] 5.5 Create `modules/products/routes/products.routes.ts` that registers `GET /products` and `GET /products/:productId` with public access.
+- [x] 5.6 Return `PRODUCT_NOT_FOUND` (using the code from `@casecellshop/shared`) for missing product detail requests.
+- [x] 5.7 Add product controller tests that mock the service and assert HTTP status and response body.
 
 ## 6. Authentication API
 
-- [ ] 6.1 Create `modules/auth/models/auth.repository.ts` with a method to look up a user by email.
-- [ ] 6.2 Create `modules/auth/models/auth.types.ts` for internal auth/user types.
-- [ ] 6.3 Create `modules/auth/utils/token.utils.ts` for JWT sign/verify helpers.
-- [ ] 6.4 Create `modules/auth/services/auth.service.ts` that verifies passwords with bcrypt and issues JWTs using token utils.
-- [ ] 6.5 Create `modules/auth/controllers/auth.controller.ts` that calls the service and returns the standard success envelope using `loginRequestSchema` from `@casecellshop/shared`.
-- [ ] 6.6 Create `modules/auth/routes/auth.routes.ts` that registers `POST /auth/login`.
-- [ ] 6.7 Return `INVALID_CREDENTIALS` (code from `@casecellshop/shared`) for failed login attempts.
-- [ ] 6.8 Implement auth guard behavior via `common/plugins/auth.plugin.ts` that returns `AUTH_REQUIRED` for unauthenticated `POST /orders` requests.
-- [ ] 6.9 Add auth controller and service tests for success, invalid credentials, and protected route access.
+- [x] 6.1 Create `modules/auth/models/auth.repository.ts` with a method to look up a user by email.
+- [x] 6.2 Create `modules/auth/models/auth.types.ts` for internal auth/user types.
+- [x] 6.3 Create `modules/auth/utils/token.utils.ts` for JWT sign/verify helpers.
+- [x] 6.4 Create `modules/auth/services/auth.service.ts` that verifies passwords with bcrypt and issues JWTs using token utils.
+- [x] 6.5 Create `modules/auth/controllers/auth.controller.ts` that calls the service and returns the standard success envelope using `loginRequestSchema` from `@casecellshop/shared`.
+- [x] 6.6 Create `modules/auth/routes/auth.routes.ts` that registers `POST /auth/login`.
+- [x] 6.7 Return `INVALID_CREDENTIALS` (code from `@casecellshop/shared`) for failed login attempts.
+- [x] 6.8 Implement auth guard behavior via `common/plugins/auth.plugin.ts` that returns `AUTH_REQUIRED` for unauthenticated `POST /orders` requests.
+- [x] 6.9 Add auth controller and service tests for success, invalid credentials, and protected route access.
 
 ## 7. Checkout Orders API
 

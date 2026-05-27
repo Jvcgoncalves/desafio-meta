@@ -20,6 +20,8 @@ pnpm turbo run test:integration
 pnpm turbo run dev
 ```
 
+API tests use Vitest and live in `apps/api/tests/` so production source folders remain focused on implementation code.
+
 ## Database
 
 The API uses Prisma with PostgreSQL. Local database commands:

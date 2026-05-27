@@ -26,7 +26,7 @@ The project SHALL include documentation for setup, architecture, environment var
 - **THEN** they can see a concise record of AI-assisted prompts and human validation.
 
 ### Requirement: Backend automated tests
-The API SHALL include unit tests for controllers and use cases, integration tests against PostgreSQL, and at least one concurrency test for atomic stock reservation.
+The API SHALL include Vitest unit tests for controllers and use cases, integration tests against PostgreSQL, and at least one concurrency test for atomic stock reservation. API test files SHALL live under `apps/api/tests/` rather than inside production module folders.
 
 #### Scenario: Controller behavior is tested
 - **WHEN** backend unit tests run

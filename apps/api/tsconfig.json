@@ -4,5 +4,10 @@
     "outDir": "dist",
     "rootDir": "."
   },
-  "include": ["src/**/*.ts", "prisma/**/*.ts", "jest.config.ts"]
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "prisma/**/*.ts",
+    "vitest.config.ts"
+  ]
 }
