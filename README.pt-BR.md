@@ -86,7 +86,7 @@ pnpm --filter api db:migrate
 pnpm --filter api db:seed
 ```
 
-O seed cria o usuário de demonstração com hash de senha bcrypt e três produtos de exemplo de capas de celular.
+O seed cria o usuário de demonstração com hash de senha bcrypt e onze produtos de exemplo de capas de celular.
 
 ## Docker
 
