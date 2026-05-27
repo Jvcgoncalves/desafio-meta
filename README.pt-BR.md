@@ -245,7 +245,7 @@ Esse comando espera PostgreSQL em `localhost:5432` quando os testes de integraç
 ```mermaid
 flowchart LR
   Browser[Aplicação web React] -->|chamadas tipadas de service| API[API Fastify]
-  API --> Shared[@casecellshop/shared contracts]
+  API --> Shared["@casecellshop/shared contracts"]
   Browser --> Shared
   API --> Prisma[Prisma client]
   Prisma --> Postgres[(PostgreSQL)]
