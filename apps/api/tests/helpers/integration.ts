@@ -40,7 +40,6 @@ export const TEST_PRODUCTS = [
 ];
 
 export function getTestDatabaseUrl(): string | null {
-  console.log({env: process.env.JWT_SECRET})
   return process.env.TEST_DATABASE_URL ?? process.env.DATABASE_URL ?? null;
 }
 
