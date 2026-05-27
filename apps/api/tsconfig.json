@@ -2,7 +2,7 @@
   "extends": "@casecellshop/tsconfig/node.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "."
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "prisma/**/*.ts", "jest.config.ts"]
 }

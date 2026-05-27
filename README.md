@@ -20,6 +20,29 @@ pnpm turbo run test:integration
 pnpm turbo run dev
 ```
 
+## Database
+
+The API uses Prisma with PostgreSQL. Local database commands:
+
+```bash
+pnpm --filter api prisma:generate
+pnpm --filter api db:migrate
+pnpm --filter api db:seed
+```
+
+For Docker-based local use, start PostgreSQL first and then run migration and seed commands against the exposed database:
+
+```bash
+docker compose up -d postgres
+pnpm --filter api db:migrate
+pnpm --filter api db:seed
+```
+
+Seed credentials:
+
+- Email: `demo@casecellshop.local`
+- Password: `demo123`
+
 ## Docker
 
 ```bash

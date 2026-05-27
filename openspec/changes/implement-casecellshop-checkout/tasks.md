@@ -24,23 +24,23 @@
 
 ## 3. API Foundation
 
-- [ ] 3.1 Install Fastify API dependencies: `fastify`, `@fastify/cors`, `@fastify/jwt`, `@fastify/swagger`, `@fastify/swagger-ui`, `zod`, `prisma`, `@prisma/client`, `bcryptjs`, `pino`, `nanoid`, and `@casecellshop/shared`.
-- [ ] 3.2 Configure API `tsconfig.json` extending `@casecellshop/tsconfig/node.json`, Jest config, scripts, and the source directory layout following the `<module>/controllers`, `<module>/routes`, `<module>/services`, `<module>/models`, `<module>/utils` convention.
-- [ ] 3.3 Implement `buildApp(dependencies)` in `app.ts` and keep network startup isolated in `server.ts`.
-- [ ] 3.4 Add common success and error response types by importing `ApiSuccessResponse`, `ApiErrorResponse`, and `AppErrorCode` from `@casecellshop/shared` — do not duplicate these types locally.
-- [ ] 3.5 Add `common/errors/app-error.ts` with the base `AppError` class and `common/errors/error-handler.ts` with the global Fastify error handler that maps validation and known domain errors to the standard error envelope with `traceId`.
-- [ ] 3.6 Add Fastify plugins under `common/plugins/`: request-ID, Pino logger, JWT auth guard, and Prisma client.
-- [ ] 3.7 Add `common/logging/logger.ts` as a Pino factory shared by all modules.
-- [ ] 3.8 Register route modules for auth, products, and orders through the app factory without embedding business logic in controllers.
+- [x] 3.1 Install Fastify API dependencies: `fastify`, `@fastify/cors`, `@fastify/jwt`, `@fastify/swagger`, `@fastify/swagger-ui`, `zod`, `prisma`, `@prisma/client`, `bcryptjs`, `pino`, `nanoid`, and `@casecellshop/shared`.
+- [x] 3.2 Configure API `tsconfig.json` extending `@casecellshop/tsconfig/node.json`, Jest config, scripts, and the source directory layout following the `<module>/controllers`, `<module>/routes`, `<module>/services`, `<module>/models`, `<module>/utils` convention.
+- [x] 3.3 Implement `buildApp(dependencies)` in `app.ts` and keep network startup isolated in `server.ts`.
+- [x] 3.4 Add common success and error response types by importing `ApiSuccessResponse`, `ApiErrorResponse`, and `AppErrorCode` from `@casecellshop/shared` — do not duplicate these types locally.
+- [x] 3.5 Add `common/errors/app-error.ts` with the base `AppError` class and `common/errors/error-handler.ts` with the global Fastify error handler that maps validation and known domain errors to the standard error envelope with `traceId`.
+- [x] 3.6 Add Fastify plugins under `common/plugins/`: request-ID, Pino logger, JWT auth guard, and Prisma client.
+- [x] 3.7 Add `common/logging/logger.ts` as a Pino factory shared by all modules.
+- [x] 3.8 Register route modules for auth, products, and orders through the app factory without embedding business logic in controllers.
 
 ## 4. Database and Seed Data
 
-- [ ] 4.1 Define Prisma models for users, products, orders, order items, and idempotency keys.
-- [ ] 4.2 Add constraints for unique user email and unique `(user_id, idempotency_key)`.
-- [ ] 4.3 Add order status enum or equivalent status validation for `PENDING_ERP`, `CONFIRMED`, `FAILED_TEMPORARY`, `EXPIRED`, `REJECTED_STOCK`, and `CANCELLED` — use the same status values defined in `@casecellshop/shared`.
-- [ ] 4.4 Create and verify the initial database migration.
-- [ ] 4.5 Implement seed data for demo user `demo@casecellshop.local` with bcrypt password hash and sample phone case products.
-- [ ] 4.6 Document migration and seed commands for local and Docker-based use.
+- [x] 4.1 Define Prisma models for users, products, orders, order items, and idempotency keys.
+- [x] 4.2 Add constraints for unique user email and unique `(user_id, idempotency_key)`.
+- [x] 4.3 Add order status enum or equivalent status validation for `PENDING_ERP`, `CONFIRMED`, `FAILED_TEMPORARY`, `EXPIRED`, `REJECTED_STOCK`, and `CANCELLED` — use the same status values defined in `@casecellshop/shared`.
+- [x] 4.4 Create and verify the initial database migration.
+- [x] 4.5 Implement seed data for demo user `demo@casecellshop.local` with bcrypt password hash and sample phone case products.
+- [x] 4.6 Document migration and seed commands for local and Docker-based use.
 
 ## 5. Product Catalog API
 

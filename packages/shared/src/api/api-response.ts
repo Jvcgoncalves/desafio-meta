@@ -1,4 +1,4 @@
-import type { AppErrorCode } from "../errors/app-error-code";
+import type { AppErrorCode } from "../errors/app-error-code.js";
 
 export interface ApiSuccessResponse<TData> {
   success: true;

@@ -1,4 +1,4 @@
-import type { OrderStatus } from "./order-status";
+import type { OrderStatus } from "./order-status.js";
 
 export interface CreateOrderItem {
   productId: string;
