@@ -245,7 +245,7 @@ This command expects PostgreSQL on `localhost:5432` when API integration tests a
 ```mermaid
 flowchart LR
   Browser[React web app] -->|typed service calls| API[Fastify API]
-  API --> Shared[@casecellshop/shared contracts]
+  API --> Shared["@casecellshop/shared contracts"]
   Browser --> Shared
   API --> Prisma[Prisma client]
   Prisma --> Postgres[(PostgreSQL)]
