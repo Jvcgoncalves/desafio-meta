@@ -37,7 +37,52 @@ export async function buildApp(
     openapi: {
       info: {
         title: "CaseCellShop API",
+        description:
+          "CaseCellShop backend API for authentication, product catalog, and checkout order flow.",
         version: "0.1.0"
+      },
+      servers: [
+        {
+          url: "http://localhost:3000",
+          description: "Local development"
+        }
+      ],
+      tags: [
+        { name: "System", description: "Service health and operational endpoints." },
+        { name: "Auth", description: "Authentication and token issuance." },
+        { name: "Products", description: "Product catalog endpoints." },
+        { name: "Orders", description: "Order creation and tracking endpoints." }
+      ],
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT",
+            description: "JWT access token returned by the login endpoint."
+          }
+        },
+        schemas: {
+          ApiErrorResponse: {
+            type: "object",
+            required: ["success", "message", "error", "traceId"],
+            properties: {
+              success: { type: "boolean", const: false },
+              message: { type: "string" },
+              error: {
+                type: "object",
+                required: ["code"],
+                properties: {
+                  code: { type: "string" },
+                  details: {}
+                },
+                additionalProperties: false
+              },
+              traceId: { type: "string" }
+            },
+            additionalProperties: false
+          }
+        }
       }
     }
   });
@@ -51,11 +96,40 @@ export async function buildApp(
     await app.register(prismaPlugin);
   }
 
-  app.get("/health", async () => ({
-    success: true,
-    message: "API is healthy.",
-    data: { status: "ok" }
-  }));
+  app.get(
+    "/health",
+    {
+      schema: {
+        tags: ["System"],
+        summary: "Health check",
+        description: "Returns API health status for monitoring and readiness checks.",
+        response: {
+          200: {
+            type: "object",
+            required: ["success", "message", "data"],
+            properties: {
+              success: { type: "boolean", const: true },
+              message: { type: "string" },
+              data: {
+                type: "object",
+                required: ["status"],
+                properties: {
+                  status: { type: "string" }
+                },
+                additionalProperties: false
+              }
+            },
+            additionalProperties: false
+          }
+        }
+      }
+    },
+    async () => ({
+      success: true,
+      message: "API is healthy.",
+      data: { status: "ok" }
+    })
+  );
 
   await app.register(authRoutes, { prefix: "/auth" });
   await app.register(productsRoutes, { prefix: "/products" });
