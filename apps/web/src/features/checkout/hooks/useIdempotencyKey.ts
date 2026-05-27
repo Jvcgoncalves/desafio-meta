@@ -10,8 +10,8 @@ export function useIdempotencyKey() {
   const [attempt, setAttempt] = useState<CheckoutAttempt | null>(null);
 
   const keyForAttempt = useCallback(
-    (input: { productId: string; quantity: number }) => {
-      const fingerprint = createCheckoutFingerprint(input);
+    (input: { items: Array<{ productId: string; quantity: number }> }) => {
+      const fingerprint = createCheckoutFingerprint(input.items);
       const nextAttempt = getOrCreateRetryKey(attempt, fingerprint);
       setAttempt(nextAttempt);
       return nextAttempt.key;

@@ -9,7 +9,7 @@ export function Input({ label, error, id, className = "", ...props }: InputProps
   const inputId = id ?? props.name;
 
   return (
-    <label className="grid gap-2 text-sm font-medium text-text-base">
+    <label className="grid gap-2 text-base font-medium text-text-base">
       <span>{label}</span>
       <input
         id={inputId}

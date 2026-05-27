@@ -9,9 +9,9 @@ export function LoginRoute({ auth }: LoginRouteProps) {
   return (
     <section className="mx-auto grid w-shell gap-6 py-8">
       <div className="grid gap-2">
-        <h1 className="text-2xl font-bold">Log in</h1>
-        <p className="max-w-2xl text-sm text-muted">
-          Use the seeded demo account to submit checkout requests.
+        <h1 className="text-3xl font-bold">Entrar</h1>
+        <p className="max-w-2xl text-base text-muted">
+          Use a conta demo para finalizar pedidos no carrinho.
         </p>
       </div>
       <div className="max-w-md">

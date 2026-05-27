@@ -8,7 +8,7 @@ interface OrderStatusViewProps {
 }
 
 function formatDate(value: string): string {
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("pt-BR", {
     dateStyle: "medium",
     timeStyle: "short"
   }).format(new Date(value));
@@ -20,22 +20,22 @@ export function OrderStatusView({ order }: OrderStatusViewProps) {
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
         <div className="grid gap-1">
           <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-            Order
+            Pedido
           </p>
           <h1 className="break-all text-xl font-bold">{order.orderId}</h1>
         </div>
         <StatusBadge status={order.status} />
       </div>
-      <p className="rounded-app border border-border-base bg-background px-4 py-3 text-sm text-text-base">
+      <p className="rounded-app border border-border-base bg-background px-4 py-3 text-base text-text-base">
         {order.statusMessage}
       </p>
-      <dl className="grid gap-4 text-sm sm:grid-cols-2">
+      <dl className="grid gap-4 text-base sm:grid-cols-2">
         <div className="grid gap-1">
-          <dt className="font-semibold text-muted">Created</dt>
+          <dt className="font-semibold text-muted">Criado em</dt>
           <dd>{formatDate(order.createdAt)}</dd>
         </div>
         <div className="grid gap-1">
-          <dt className="font-semibold text-muted">Updated</dt>
+          <dt className="font-semibold text-muted">Atualizado em</dt>
           <dd>{formatDate(order.updatedAt)}</dd>
         </div>
       </dl>

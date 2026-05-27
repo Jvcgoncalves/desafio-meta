@@ -15,14 +15,20 @@ export interface CheckoutAttempt {
   fingerprint: string;
 }
 
-export function createCheckoutFingerprint(input: {
-  productId: string;
-  quantity: number;
-}): string {
-  return JSON.stringify({
-    productId: input.productId,
-    quantity: input.quantity
-  });
+export function createCheckoutFingerprint(
+  items: Array<{ productId: string; quantity: number }>
+): string {
+  const normalized = items
+    .map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity
+    }))
+    .sort(
+      (a, b) =>
+        a.productId.localeCompare(b.productId) || a.quantity - b.quantity
+    );
+
+  return JSON.stringify(normalized);
 }
 
 export function getOrCreateRetryKey(

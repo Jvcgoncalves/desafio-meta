@@ -7,12 +7,12 @@ interface StatusBadgeProps {
 }
 
 const labels: Record<OrderStatus, string> = {
-  PENDING_ERP: "Pending ERP",
-  CONFIRMED: "Confirmed",
-  FAILED_TEMPORARY: "Temporary failure",
-  EXPIRED: "Expired",
-  REJECTED_STOCK: "Rejected stock",
-  CANCELLED: "Cancelled"
+  PENDING_ERP: "Pendente no ERP",
+  CONFIRMED: "Confirmado",
+  FAILED_TEMPORARY: "Falha temporaria",
+  EXPIRED: "Expirado",
+  REJECTED_STOCK: "Rejeitado por estoque",
+  CANCELLED: "Cancelado"
 };
 
 const tones: Record<

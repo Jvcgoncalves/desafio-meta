@@ -1,38 +1,27 @@
-import { useMemo } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 import { useAuth } from "./features/auth/hooks/useAuth";
+import { CartProvider } from "./features/cart/context/CartContext";
+import { ToastProvider } from "./hooks/useToast";
 import { LoginRoute } from "./routes/login.route";
 import { OrderStatusRoute } from "./routes/order-status.route";
 import { ProductsRoute } from "./routes/products.route";
 
-function useRoute() {
-  return useMemo(() => {
-    const path = window.location.pathname;
-    const orderMatch = path.match(/^\/orders\/([^/]+)$/);
-
-    if (path === "/login") {
-      return { name: "login" as const };
-    }
-
-    if (orderMatch?.[1]) {
-      return { name: "order-status" as const, orderId: orderMatch[1] };
-    }
-
-    return { name: "products" as const };
-  }, []);
-}
-
 export function App() {
   const auth = useAuth();
-  const route = useRoute();
 
   return (
-    <main className="min-h-screen">
-      {route.name === "login" ? <LoginRoute auth={auth} /> : null}
-      {route.name === "order-status" ? (
-        <OrderStatusRoute orderId={route.orderId} />
-      ) : null}
-      {route.name === "products" ? <ProductsRoute auth={auth} /> : null}
-    </main>
+    <ToastProvider>
+      <CartProvider>
+        <main className="min-h-screen">
+          <Routes>
+            <Route path="/" element={<ProductsRoute auth={auth} />} />
+            <Route path="/login" element={<LoginRoute auth={auth} />} />
+            <Route path="/pedidos/:orderId" element={<OrderStatusRoute />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+      </CartProvider>
+    </ToastProvider>
   );
 }

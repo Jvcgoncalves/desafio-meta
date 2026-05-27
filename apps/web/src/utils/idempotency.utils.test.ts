@@ -20,10 +20,12 @@ describe("idempotency utils", () => {
   });
 
   it("reuses the same key for the same checkout fingerprint", () => {
-    const fingerprint = createCheckoutFingerprint({
-      productId: "product-1",
-      quantity: 2
-    });
+    const fingerprint = createCheckoutFingerprint([
+      {
+        productId: "product-1",
+        quantity: 2
+      }
+    ]);
     const attempt = {
       key: "checkout-existing",
       fingerprint
@@ -35,20 +37,37 @@ describe("idempotency utils", () => {
   it("creates a new key when checkout data changes", () => {
     const previous = {
       key: "checkout-existing",
-      fingerprint: createCheckoutFingerprint({
-        productId: "product-1",
-        quantity: 1
-      })
+      fingerprint: createCheckoutFingerprint([
+        {
+          productId: "product-1",
+          quantity: 1
+        }
+      ])
     };
     const next = getOrCreateRetryKey(
       previous,
-      createCheckoutFingerprint({
-        productId: "product-1",
-        quantity: 3
-      })
+      createCheckoutFingerprint([
+        {
+          productId: "product-1",
+          quantity: 3
+        }
+      ])
     );
 
     expect(next.key).not.toBe(previous.key);
     expect(next.fingerprint).not.toBe(previous.fingerprint);
+  });
+
+  it("creates the same fingerprint regardless of item order", () => {
+    const first = createCheckoutFingerprint([
+      { productId: "product-2", quantity: 1 },
+      { productId: "product-1", quantity: 2 }
+    ]);
+    const second = createCheckoutFingerprint([
+      { productId: "product-1", quantity: 2 },
+      { productId: "product-2", quantity: 1 }
+    ]);
+
+    expect(first).toBe(second);
   });
 });

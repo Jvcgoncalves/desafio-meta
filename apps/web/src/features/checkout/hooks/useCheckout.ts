@@ -6,8 +6,7 @@ import { createOrder } from "../../../services/orders.service";
 import { useIdempotencyKey } from "./useIdempotencyKey";
 
 interface CheckoutInput {
-  productId: string;
-  quantity: number;
+  items: Array<{ productId: string; quantity: number }>;
   token: string;
 }
 
@@ -21,15 +20,12 @@ export function useCheckout() {
 
   const submit = useCallback(
     async (input: CheckoutInput) => {
-      const idempotencyKey = idempotency.keyForAttempt({
-        productId: input.productId,
-        quantity: input.quantity
-      });
+      const idempotencyKey = idempotency.keyForAttempt({ items: input.items });
 
       const result = await runCheckout(() =>
         createOrder({
           request: {
-            items: [{ productId: input.productId, quantity: input.quantity }]
+            items: input.items
           },
           idempotencyKey,
           token: input.token
