@@ -8,6 +8,7 @@ COPY packages ./packages
 COPY apps/api ./apps/api
 
 RUN pnpm install --frozen-lockfile
+RUN pnpm --filter api prisma:generate
 RUN pnpm turbo run build --filter=api
 
 EXPOSE 3000

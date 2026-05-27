@@ -139,19 +139,19 @@
 
 ## 13. Frontend Tests
 
-- [ ] 13.1 Add unit tests for `src/services/error-mapper.ts` verifying the mapper covers every key in `APP_ERROR_CODES` from `@casecellshop/shared`.
-- [ ] 13.2 Add unit tests for `src/utils/idempotency.utils.ts` for key generation and retry-reuse behavior.
-- [ ] 13.3 Add unit tests for `src/features/order-status/components/StatusBadge.tsx` badge rendering for each `OrderStatus` value from `@casecellshop/shared`.
-- [ ] 13.4 Add unit tests for `src/features/checkout/components/QuantitySelector.tsx` quantity validation and submit blocking.
-- [ ] 13.5 Add snapshot tests for `ProductCard` with available stock and zero stock.
-- [ ] 13.6 Add snapshot tests for `CheckoutPanel` loading, `FeedbackMessage` confirmed success, insufficient stock, pending processing, and temporary failure states.
-- [ ] 13.7 Run `pnpm turbo run test typecheck lint --filter=web` and confirm all pass.
+- [x] 13.1 Add unit tests for `src/services/error-mapper.ts` verifying the mapper covers every key in `APP_ERROR_CODES` from `@casecellshop/shared`.
+- [x] 13.2 Add unit tests for `src/utils/idempotency.utils.ts` for key generation and retry-reuse behavior.
+- [x] 13.3 Add unit tests for `src/features/order-status/components/StatusBadge.tsx` badge rendering for each `OrderStatus` value from `@casecellshop/shared`.
+- [x] 13.4 Add unit tests for `src/features/checkout/components/QuantitySelector.tsx` quantity validation and submit blocking.
+- [x] 13.5 Add snapshot tests for `ProductCard` with available stock and zero stock.
+- [x] 13.6 Add snapshot tests for `CheckoutPanel` loading, `FeedbackMessage` confirmed success, insufficient stock, pending processing, and temporary failure states.
+- [x] 13.7 Run `pnpm turbo run test typecheck lint --filter=web` and confirm all pass.
 
 ## 14. Documentation and Final Verification
 
-- [ ] 14.1 Write `README.md` with goal, stack, Turborepo monorepo structure, shared contracts package, architecture, setup, Docker, local commands, environment variables, migrations, seed, endpoints, errors, stock strategy, idempotency, ERP simulation, testing, diagrams, limitations, and next steps.
-- [ ] 14.2 Write `PROMPTS.md` with concise AI usage and human validation notes.
-- [ ] 14.3 Add architecture, checkout flow, user action, database, and class/port diagrams where appropriate.
-- [ ] 14.4 Run `pnpm turbo run build test typecheck` from the monorepo root and confirm all packages pass.
+- [x] 14.1 Write `README.md` with goal, stack, Turborepo monorepo structure, shared contracts package, architecture, setup, Docker, local commands, environment variables, migrations, seed, endpoints, errors, stock strategy, idempotency, ERP simulation, testing, diagrams, limitations, and next steps.
+- [x] 14.2 Write `PROMPTS.md` with concise AI usage and human validation notes.
+- [x] 14.3 Add architecture, checkout flow, user action, database, and class/port diagrams where appropriate.
+- [x] 14.4 Run `pnpm turbo run build test typecheck` from the monorepo root and confirm all packages pass.
 - [ ] 14.5 Run Docker Compose build/start verification and document any required manual migration or seed step.
 - [ ] 14.6 Review acceptance checklist against product catalog, authentication, checkout, order status, shared contract consumption, UI resilience, delivery, and documentation specs.

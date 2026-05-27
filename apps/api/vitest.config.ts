@@ -1,5 +1,4 @@
 import { defineConfig } from "vitest/config";
-import { TEST_USER } from "./tests/helpers/integration.js";
 
 export default defineConfig({
   test: {
@@ -9,6 +8,6 @@ export default defineConfig({
       TEST_DATABASE_URL: "postgresql://casecellshop:casecellshop@localhost:5432/casecellshop?schema=public", // remove it if want to skip integration tests
       RUN_TEST_MIGRATIONS: "2",
     },
-    fileParallelism: true,
+    fileParallelism: false,
   }
 });
