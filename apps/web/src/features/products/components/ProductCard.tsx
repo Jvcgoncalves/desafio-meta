@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "../../../components/ui/Button";
 import { Badge } from "../../../components/ui/Badge";
 import { Card } from "../../../components/ui/Card";
+import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
+import { useToast } from "../../../hooks/useToast";
 import {
   QuantitySelector,
   validateQuantity
@@ -21,11 +23,13 @@ const currency = new Intl.NumberFormat("pt-BR", {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { items, addItem } = useCartContext();
+  const { showToast } = useToast();
   const cartItem = useMemo(
     () => items.find((item) => item.productId === product.id),
     [items, product.id]
   );
   const [quantity, setQuantity] = useState(cartItem?.quantity ?? 1);
+  const [isSumDialogOpen, setIsSumDialogOpen] = useState(false);
 
   useEffect(() => {
     if (cartItem) {
@@ -35,7 +39,49 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const hasStock = product.availableStock > 0;
   const validationMessage = validateQuantity(quantity);
-  const actionLabel = cartItem ? "Atualizar carrinho" : "Adicionar ao carrinho";
+
+  const applyAddToCart = (targetQuantity: number, successMessage: string) => {
+    const result = addItem(product, targetQuantity);
+
+    if (!result.ok) {
+      showToast(result.message, "error");
+      return;
+    }
+
+    showToast(`${successMessage} Total no carrinho: ${result.totalQuantity}.`, "success");
+  };
+
+  const handleAddToCart = () => {
+    if (!hasStock) {
+      showToast("Estoque indisponivel para este item.", "error");
+      return;
+    }
+
+    if (validationMessage) {
+      showToast(validationMessage, "error");
+      return;
+    }
+
+    if (!cartItem) {
+      applyAddToCart(quantity, "Item adicionado ao carrinho.");
+      return;
+    }
+
+    setIsSumDialogOpen(true);
+  };
+
+  const handleConfirmSum = () => {
+    if (!cartItem) {
+      setIsSumDialogOpen(false);
+      return;
+    }
+
+    applyAddToCart(
+      cartItem.quantity + quantity,
+      "Quantidade somada ao item no carrinho."
+    );
+    setIsSumDialogOpen(false);
+  };
 
   return (
     <Card className="grid min-h-[360px] content-between gap-5 p-5">
@@ -64,14 +110,23 @@ export function ProductCard({ product }: ProductCardProps) {
         <Button
           type="button"
           disabled={!hasStock || Boolean(validationMessage)}
-          onClick={() => addItem(product, quantity)}
+          onClick={handleAddToCart}
         >
-          {actionLabel}
+          Adicionar ao carrinho
         </Button>
         {!hasStock ? (
           <p className="text-base text-muted">Estoque indisponivel.</p>
         ) : null}
       </div>
+      <ConfirmDialog
+        isOpen={isSumDialogOpen}
+        title="Item ja existe no carrinho"
+        description={`Deseja somar ${quantity} unidade(s) de ${product.name} ao que ja esta no carrinho?`}
+        confirmLabel="Somar quantidade"
+        cancelLabel="Cancelar"
+        onConfirm={handleConfirmSum}
+        onCancel={() => setIsSumDialogOpen(false)}
+      />
     </Card>
   );
 }

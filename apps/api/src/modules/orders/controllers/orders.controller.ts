@@ -2,7 +2,8 @@ import type {
   ApiSuccessResponse,
   CreateOrderRequest,
   CreateOrderResponse,
-  OrderStatusResponseDto
+  OrderStatusResponseDto,
+  UserOrderSummaryDto
 } from "@casecellshop/shared";
 import type { FastifyReply, FastifyRequest } from "fastify";
 
@@ -22,6 +23,10 @@ export interface GetOrderStatusServicePort {
   getOrderStatus: (orderId: string) => Promise<OrderStatusResponseDto>;
 }
 
+export interface ListUserOrdersServicePort {
+  getUserOrders: (userId: string) => Promise<UserOrderSummaryDto[]>;
+}
+
 interface OrderParams {
   orderId: string;
 }
@@ -37,7 +42,8 @@ function headerValue(value: string | string[] | undefined): string | undefined {
 export class OrdersController {
   constructor(
     private readonly createOrderService: CreateOrderServicePort,
-    private readonly getOrderStatusService: GetOrderStatusServicePort
+    private readonly getOrderStatusService: GetOrderStatusServicePort,
+    private readonly listUserOrdersService: ListUserOrdersServicePort
   ) {}
 
   create = async (
@@ -79,6 +85,20 @@ export class OrdersController {
       success: true,
       message: "Order status loaded successfully.",
       data: status
+    };
+
+    reply.status(200).send(response);
+  };
+
+  listMine = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ): Promise<void> => {
+    const orders = await this.listUserOrdersService.getUserOrders(request.user.id);
+    const response: ApiSuccessResponse<UserOrderSummaryDto[]> = {
+      success: true,
+      message: "Orders loaded successfully.",
+      data: orders
     };
 
     reply.status(200).send(response);

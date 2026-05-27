@@ -153,5 +153,5 @@
 - [x] 14.2 Write `PROMPTS.md` with concise AI usage and human validation notes.
 - [x] 14.3 Add architecture, checkout flow, user action, database, and class/port diagrams where appropriate.
 - [x] 14.4 Run `pnpm turbo run build test typecheck` from the monorepo root and confirm all packages pass.
-- [ ] 14.5 Run Docker Compose build/start verification and document any required manual migration or seed step.
-- [ ] 14.6 Review acceptance checklist against product catalog, authentication, checkout, order status, shared contract consumption, UI resilience, delivery, and documentation specs.
+- [x] 14.5 Run Docker Compose build/start verification and document any required manual migration or seed step.
+- [x] 14.6 Review acceptance checklist against product catalog, authentication, checkout, order status, shared contract consumption, UI resilience, delivery, and documentation specs.

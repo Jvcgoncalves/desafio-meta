@@ -41,7 +41,7 @@ export function CartDrawer({ isOpen, onClose, token }: CartDrawerProps) {
   const { showToast } = useToast();
   const { items, subtotalCents, removeItem, updateQuantity, clearCart } =
     useCartContext();
-  const checkout = useCheckout();
+  const { checkout, submit, reset } = useCheckout();
   const [inlineError, setInlineError] = useState<string | null>(null);
 
   const checkoutItems = useMemo(
@@ -56,7 +56,7 @@ export function CartDrawer({ isOpen, onClose, token }: CartDrawerProps) {
   useEffect(() => {
     if (!isOpen) {
       setInlineError(null);
-      checkout.reset();
+      reset();
       return;
     }
 
@@ -68,7 +68,7 @@ export function CartDrawer({ isOpen, onClose, token }: CartDrawerProps) {
 
     window.addEventListener("keydown", onEscape);
     return () => window.removeEventListener("keydown", onEscape);
-  }, [checkout, isOpen, onClose]);
+  }, [isOpen, onClose, reset]);
 
   if (!isOpen) {
     return null;
@@ -88,8 +88,7 @@ export function CartDrawer({ isOpen, onClose, token }: CartDrawerProps) {
 
     setInlineError(null);
 
-    void checkout
-      .submit({ items: checkoutItems, token })
+    void submit({ items: checkoutItems, token })
       .then((result) => {
         clearCart();
         onClose();
@@ -113,7 +112,7 @@ export function CartDrawer({ isOpen, onClose, token }: CartDrawerProps) {
     >
       <aside
         aria-label="Carrinho de compras"
-        className="flex h-full w-full max-w-xl flex-col gap-5 bg-background p-5 shadow-2xl"
+        className="flex h-full w-full max-w-xl flex-col gap-5 bg-gray-100 p-5 shadow-2xl"
       >
         <header className="flex items-center justify-between gap-3 border-b border-border-base pb-4">
           <div className="grid gap-1">
@@ -127,7 +126,7 @@ export function CartDrawer({ isOpen, onClose, token }: CartDrawerProps) {
           </Button>
         </header>
 
-        <div className="grid flex-1 gap-3 overflow-y-auto pr-1">
+        <div className="flex flex-col gap-y-4 overflow-y-auto pr-1">
           {items.length === 0 ? (
             <p className="rounded-app border border-border-base bg-surface px-4 py-3 text-base text-muted">
               Carrinho vazio.
@@ -158,7 +157,7 @@ export function CartDrawer({ isOpen, onClose, token }: CartDrawerProps) {
 
           <Button
             type="button"
-            isLoading={checkout.checkout.status === "loading"}
+            isLoading={checkout.status === "loading"}
             disabled={items.length === 0}
             onClick={handleCheckout}
           >

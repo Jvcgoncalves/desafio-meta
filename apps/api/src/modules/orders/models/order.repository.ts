@@ -1,5 +1,7 @@
-import type { Prisma, PrismaClient } from "@prisma/client";
-import type { OrderStatus } from "@casecellshop/shared";
+import { Prisma, type PrismaClient } from "@prisma/client";
+import { APP_ERROR_CODES, type OrderStatus } from "@casecellshop/shared";
+
+import { AppError } from "../../../common/errors/app-error.js";
 
 import type { OrderItemRecord, OrderRecord } from "./order.types.js";
 
@@ -96,6 +98,17 @@ export class OrderRepository {
     });
 
     return order ? toOrderRecord(order) : null;
+  }
+
+  async findByUserId(userId: string, limit = 20): Promise<OrderRecord[]> {
+    const orders = await this.prisma.order.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      include: orderInclude
+    });
+
+    return orders.map(toOrderRecord);
   }
 
   async findByIdForUpdate(

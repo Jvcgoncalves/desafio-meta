@@ -5,6 +5,18 @@ import type { CartItem } from "../types";
 
 const STORAGE_KEY = "casecellshop.cart";
 
+interface CartMutationSuccess {
+  ok: true;
+  totalQuantity: number;
+}
+
+interface CartMutationFailure {
+  ok: false;
+  message: string;
+}
+
+export type CartMutationResult = CartMutationSuccess | CartMutationFailure;
+
 function clampQuantity(quantity: number, max: number) {
   const safeQuantity = Math.trunc(quantity);
   return Math.max(1, Math.min(safeQuantity, max));
@@ -59,20 +71,44 @@ export function useCart() {
   }, [items]);
 
   const addItem = useCallback(
-    (product: ProductListItemDto, quantity: number) => {
+    (product: ProductListItemDto, quantity: number): CartMutationResult => {
       const max = Math.max(0, product.availableStock);
+      const safeQuantity = Math.trunc(quantity);
 
       if (max === 0) {
-        return;
+        return { ok: false, message: "Estoque indisponivel para este item." };
       }
 
+      if (!Number.isInteger(quantity) || safeQuantity <= 0) {
+        return { ok: false, message: "Quantidade invalida para adicionar ao carrinho." };
+      }
+
+      let mutationResult: CartMutationResult = {
+        ok: false,
+        message: "Nao foi possivel atualizar o carrinho."
+      };
+
       setItems((current) => {
-        const nextQuantity = clampQuantity(quantity, max);
+        const nextQuantity = safeQuantity;
         const existingIndex = current.findIndex(
           (item) => item.productId === product.id
         );
 
+        if (nextQuantity > max) {
+          mutationResult = {
+            ok: false,
+            message: `Quantidade acima do estoque disponivel (${max}).`
+          };
+
+          return current;
+        }
+
         if (existingIndex < 0) {
+          mutationResult = {
+            ok: true,
+            totalQuantity: nextQuantity
+          };
+
           return [
             ...current,
             {
@@ -85,6 +121,11 @@ export function useCart() {
             }
           ];
         }
+
+        mutationResult = {
+          ok: true,
+          totalQuantity: nextQuantity
+        };
 
         return current.map((item, index) =>
           index === existingIndex
@@ -99,6 +140,8 @@ export function useCart() {
             : item
         );
       });
+
+      return mutationResult;
     },
     []
   );
@@ -135,7 +178,7 @@ export function useCart() {
   }, []);
 
   const totalItems = useMemo(
-    () => items.reduce((sum, item) => sum + item.quantity, 0),
+    () => items.length,
     [items]
   );
 

@@ -916,7 +916,7 @@ Success response - `200 OK`:
   "data": {
     "orderId": "order-id",
     "status": "PENDING_ERP",
-    "statusMessage": "Your order is reserved and waiting for processing confirmation.",
+    "statusMessage": "Seu pedido foi reservado e está esperando confirmação",
     "createdAt": "2026-05-24T12:00:00.000Z",
     "updatedAt": "2026-05-24T12:00:05.000Z"
   }

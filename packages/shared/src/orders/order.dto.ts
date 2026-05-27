@@ -33,3 +33,11 @@ export interface OrderStatusResponseDto {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UserOrderSummaryDto {
+  orderId: string;
+  status: OrderStatus;
+  totalCents: number;
+  createdAt: string;
+  updatedAt: string;
+}

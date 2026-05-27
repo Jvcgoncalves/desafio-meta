@@ -37,7 +37,7 @@ export function OrderStatusRoute() {
         </div>
         <Link
           className="text-base font-semibold text-primary underline underline-offset-4"
-          to="/"
+          to="/itens"
         >
           Voltar aos produtos
         </Link>

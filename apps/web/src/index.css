@@ -10,7 +10,7 @@
   }
 
   body {
-    @apply min-h-screen bg-background text-text-base antialiased;
+    @apply min-h-screen bg-gray-100 text-text-base antialiased;
   }
 
   button,

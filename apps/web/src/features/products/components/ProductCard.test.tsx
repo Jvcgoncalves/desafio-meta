@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { CartProvider } from "../../cart/context/CartContext";
+import { ToastProvider } from "../../../hooks/useToast";
 import { ProductCard } from "./ProductCard";
 
 const product = {
@@ -15,9 +16,11 @@ const product = {
 describe("ProductCard", () => {
   it("shows add-to-cart action when stock is available", () => {
     render(
-      <CartProvider>
-        <ProductCard product={product} />
-      </CartProvider>
+      <ToastProvider>
+        <CartProvider>
+          <ProductCard product={product} />
+        </CartProvider>
+      </ToastProvider>
     );
 
     expect(screen.getByText("Adicionar ao carrinho")).toBeInTheDocument();
@@ -26,9 +29,11 @@ describe("ProductCard", () => {
 
   it("shows unavailable stock message when product is out of stock", () => {
     render(
-      <CartProvider>
-        <ProductCard product={{ ...product, availableStock: 0 }} />
-      </CartProvider>
+      <ToastProvider>
+        <CartProvider>
+          <ProductCard product={{ ...product, availableStock: 0 }} />
+        </CartProvider>
+      </ToastProvider>
     );
 
     expect(screen.getByText("Esgotado")).toBeInTheDocument();

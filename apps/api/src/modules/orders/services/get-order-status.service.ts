@@ -13,13 +13,13 @@ interface OrderStatusRepositoryPort {
 
 const STATUS_MESSAGES: Record<OrderStatus, string> = {
   PENDING_ERP:
-    "Your order is reserved and waiting for processing confirmation.",
-  CONFIRMED: "Your order was confirmed successfully.",
+    "Seu pedido foi reservado e está esperando confirmação",
+  CONFIRMED: "Seu pedido foi confirmado com sucesso.",
   FAILED_TEMPORARY:
-    "Order processing is temporarily unavailable. Check again later.",
-  EXPIRED: "This order reservation is no longer active.",
-  REJECTED_STOCK: "This order could not be completed because stock was rejected.",
-  CANCELLED: "This order reservation is no longer active."
+    "Processamento de pedidos indisponível. Tente novamente mais tarde",
+  EXPIRED: "Não está mais ativa",
+  REJECTED_STOCK: "Não é possível continuar, sem estoque disponível",
+  CANCELLED: "Não está mais ativa"
 };
 
 export class GetOrderStatusService {

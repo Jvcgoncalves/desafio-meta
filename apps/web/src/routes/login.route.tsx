@@ -7,7 +7,7 @@ interface LoginRouteProps {
 
 export function LoginRoute({ auth }: LoginRouteProps) {
   return (
-    <section className="mx-auto grid w-shell gap-6 py-8">
+    <section className="mx-auto grid w-shell gap-6 py-8 place-content-center">
       <div className="grid gap-2">
         <h1 className="text-3xl font-bold">Entrar</h1>
         <p className="max-w-2xl text-base text-muted">

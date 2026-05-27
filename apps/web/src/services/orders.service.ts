@@ -1,7 +1,8 @@
 import type {
   CreateOrderRequest,
   CreateOrderResponse,
-  OrderStatusResponseDto
+  OrderStatusResponseDto,
+  UserOrderSummaryDto
 } from "@casecellshop/shared";
 
 import { apiRequest } from "./http-client";
@@ -30,5 +31,14 @@ export async function getOrderStatus(
 ): Promise<OrderStatusResponseDto> {
   const response =
     await apiRequest<OrderStatusResponseDto>(`/orders/${orderId}`);
+  return response.data;
+}
+
+export async function listMyOrders(
+  token: string
+): Promise<UserOrderSummaryDto[]> {
+  const response = await apiRequest<UserOrderSummaryDto[]>("/orders", {
+    token
+  });
   return response.data;
 }

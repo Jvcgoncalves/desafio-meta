@@ -19,12 +19,12 @@ function orderWithStatus(status: OrderStatus): OrderRecord {
 
 describe("GetOrderStatusService", () => {
   it.each([
-    ["PENDING_ERP", "reserved and waiting"],
-    ["CONFIRMED", "confirmed successfully"],
-    ["FAILED_TEMPORARY", "temporarily unavailable"],
-    ["EXPIRED", "no longer active"],
-    ["CANCELLED", "no longer active"],
-    ["REJECTED_STOCK", "stock was rejected"]
+    ["PENDING_ERP", "Seu pedido foi reservado e está esperando confirmação"],
+    ["CONFIRMED", "Seu pedido foi confirmado com sucesso."],
+    ["FAILED_TEMPORARY", "Processamento de pedidos indisponível. Tente novamente mais tarde"],
+    ["EXPIRED", "Não está mais ativa"],
+    ["CANCELLED", "Não está mais ativa"],
+    ["REJECTED_STOCK", "Não é possível continuar, sem estoque disponível"]
   ] as const)("maps %s to a user-facing message", async (status, text) => {
     const service = new GetOrderStatusService({
       findById: async () => orderWithStatus(status)

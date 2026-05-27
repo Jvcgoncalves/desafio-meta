@@ -1,7 +1,8 @@
 import {
   APP_ERROR_CODES,
   type CreateOrderResponse,
-  type OrderStatusResponseDto
+  type OrderStatusResponseDto,
+  type UserOrderSummaryDto
 } from "@casecellshop/shared";
 import jwt from "@fastify/jwt";
 import fastify from "fastify";
@@ -38,10 +39,20 @@ const orderResponse: CreateOrderResponse = {
 const statusResponse: OrderStatusResponseDto = {
   orderId: "9f434c19-cd5c-41d8-9d1a-a51f564d75d2",
   status: "CONFIRMED",
-  statusMessage: "Your order was confirmed successfully.",
+  statusMessage: "Seu pedido foi confirmado com sucesso.",
   createdAt: "2026-01-01T10:00:00.000Z",
   updatedAt: "2026-01-01T10:05:00.000Z"
 };
+
+const userOrdersResponse: UserOrderSummaryDto[] = [
+  {
+    orderId: "9f434c19-cd5c-41d8-9d1a-a51f564d75d2",
+    status: "CONFIRMED",
+    totalCents: 7990,
+    createdAt: "2026-01-01T10:00:00.000Z",
+    updatedAt: "2026-01-01T10:05:00.000Z"
+  }
+];
 
 async function buildOrdersTestApp(
   overrides: {
@@ -51,6 +62,7 @@ async function buildOrdersTestApp(
       replayed: boolean;
     }>;
     getOrderStatus?: () => Promise<OrderStatusResponseDto>;
+    getUserOrders?: () => Promise<UserOrderSummaryDto[]>;
   } = {}
 ) {
   const app = fastify({ logger: false });
@@ -72,6 +84,10 @@ async function buildOrdersTestApp(
     getOrderStatusService: {
       getOrderStatus:
         overrides.getOrderStatus ?? (async () => statusResponse)
+    },
+    listUserOrdersService: {
+      getUserOrders:
+        overrides.getUserOrders ?? (async () => userOrdersResponse)
     }
   });
 
@@ -178,6 +194,26 @@ describe("OrdersController", () => {
       success: true,
       message: "Order status loaded successfully.",
       data: statusResponse
+    });
+  });
+
+  it("returns authenticated user order list in the standard envelope", async () => {
+    const app = await buildOrdersTestApp();
+    const token = app.jwt.sign(user);
+
+    const response = await app.inject({
+      method: "GET",
+      url: "/orders",
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toEqual({
+      success: true,
+      message: "Orders loaded successfully.",
+      data: userOrdersResponse
     });
   });
 });
