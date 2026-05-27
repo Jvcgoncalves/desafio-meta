@@ -1,8 +1,9 @@
 {
   "extends": "@casecellshop/tsconfig/react.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src"
+    "allowImportingTsExtensions": false,
+    "noEmit": true,
+    "types": ["vite/client", "vitest/globals"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts", "vitest.setup.ts"]
 }

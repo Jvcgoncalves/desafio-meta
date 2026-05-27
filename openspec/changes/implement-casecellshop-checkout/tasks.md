@@ -104,38 +104,38 @@
 
 ## 10. Web Foundation
 
-- [ ] 10.1 Initialize the React and TypeScript Vite app with test tooling and snapshot support.
-- [ ] 10.2 Configure web scripts, TypeScript config extending `@casecellshop/tsconfig/react.json`, Vite config, and the test environment.
-- [ ] 10.3 Install and configure **Tailwind CSS v3**: add `tailwindcss`, `postcss`, and `autoprefixer`; create `tailwind.config.ts` with the `theme.extend.colors` map for `background`, `surface`, `primary`, `primary-dark`, `accent`, `danger`, `success`, `text-base`, `muted`, and `border-base`; add `@tailwind` directives to `src/index.css`.
-- [ ] 10.4 Create `src/services/http-client.ts` with the base fetch wrapper and typed `ApiSuccessResponse`/`ApiErrorResponse` from `@casecellshop/shared`.
-- [ ] 10.5 Create `src/services/products.service.ts`, `src/services/orders.service.ts`, and `src/services/auth.service.ts` as API communication modules typed with DTOs from `@casecellshop/shared`.
-- [ ] 10.6 Create `src/services/error-mapper.ts` that translates `APP_ERROR_CODES` from `@casecellshop/shared` into user-facing messages.
-- [ ] 10.7 Create `src/hooks/useAsync.ts` with the shared `AsyncState<T>` discriminated union type and hook.
-- [ ] 10.8 Create `src/utils/idempotency.utils.ts` for idempotency key generation and retry-reuse logic.
-- [ ] 10.9 Create `src/components/ui/Button.tsx`, `Badge.tsx`, `Input.tsx`, `Card.tsx`, and `Spinner.tsx` as primitive common components styled with Tailwind utility classes.
+- [x] 10.1 Initialize the React and TypeScript Vite app with test tooling and snapshot support.
+- [x] 10.2 Configure web scripts, TypeScript config extending `@casecellshop/tsconfig/react.json`, Vite config, and the test environment.
+- [x] 10.3 Install and configure **Tailwind CSS v3**: add `tailwindcss`, `postcss`, and `autoprefixer`; create `tailwind.config.ts` with the `theme.extend.colors` map for `background`, `surface`, `primary`, `primary-dark`, `accent`, `danger`, `success`, `text-base`, `muted`, and `border-base`; add `@tailwind` directives to `src/index.css`.
+- [x] 10.4 Create `src/services/http-client.ts` with the base fetch wrapper and typed `ApiSuccessResponse`/`ApiErrorResponse` from `@casecellshop/shared`.
+- [x] 10.5 Create `src/services/products.service.ts`, `src/services/orders.service.ts`, and `src/services/auth.service.ts` as API communication modules typed with DTOs from `@casecellshop/shared`.
+- [x] 10.6 Create `src/services/error-mapper.ts` that translates `APP_ERROR_CODES` from `@casecellshop/shared` into user-facing messages.
+- [x] 10.7 Create `src/hooks/useAsync.ts` with the shared `AsyncState<T>` discriminated union type and hook.
+- [x] 10.8 Create `src/utils/idempotency.utils.ts` for idempotency key generation and retry-reuse logic.
+- [x] 10.9 Create `src/components/ui/Button.tsx`, `Badge.tsx`, `Input.tsx`, `Card.tsx`, and `Spinner.tsx` as primitive common components styled with Tailwind utility classes.
 
 ## 11. Web Product, Auth, and Checkout UI
 
-- [ ] 11.1 Create `src/features/products/hooks/useProducts.ts` using `useAsync` to load and expose product list state.
-- [ ] 11.2 Create `src/features/products/components/ProductCard.tsx` and `ProductGrid.tsx` styled with Tailwind, using `ProductListItemDto` from `@casecellshop/shared` as prop types.
-- [ ] 11.3 Create `src/routes/products.route.tsx` as the product list page that composes `ProductGrid` with loading and recoverable error states.
-- [ ] 11.4 Create `src/features/checkout/hooks/useIdempotencyKey.ts` that generates one stable key per checkout attempt and reuses it on retry.
-- [ ] 11.5 Create `src/features/checkout/hooks/useCheckout.ts` that manages checkout async state using `useAsync` and calls `orders.service.ts`.
-- [ ] 11.6 Create `src/features/checkout/components/QuantitySelector.tsx` that blocks zero, negative, and non-integer quantities.
-- [ ] 11.7 Create `src/features/checkout/components/CheckoutPanel.tsx` that renders the quantity selector, checkout `Button`, and loading state during submission.
-- [ ] 11.8 Create `src/features/checkout/components/FeedbackMessage.tsx` that renders recoverable messages for confirmed, pending, validation, auth, stock, duplicate, temporary failure, and internal error states using error codes from `APP_ERROR_CODES`.
-- [ ] 11.9 Create `src/features/auth/hooks/useAuth.ts` for login state and token storage.
-- [ ] 11.10 Create `src/features/auth/components/LoginForm.tsx` styled with Tailwind.
-- [ ] 11.11 Create `src/routes/login.route.tsx` as the login page.
-- [ ] 11.12 Refresh or offer to refresh product stock after stock-related checkout failures.
+- [x] 11.1 Create `src/features/products/hooks/useProducts.ts` using `useAsync` to load and expose product list state.
+- [x] 11.2 Create `src/features/products/components/ProductCard.tsx` and `ProductGrid.tsx` styled with Tailwind, using `ProductListItemDto` from `@casecellshop/shared` as prop types.
+- [x] 11.3 Create `src/routes/products.route.tsx` as the product list page that composes `ProductGrid` with loading and recoverable error states.
+- [x] 11.4 Create `src/features/checkout/hooks/useIdempotencyKey.ts` that generates one stable key per checkout attempt and reuses it on retry.
+- [x] 11.5 Create `src/features/checkout/hooks/useCheckout.ts` that manages checkout async state using `useAsync` and calls `orders.service.ts`.
+- [x] 11.6 Create `src/features/checkout/components/QuantitySelector.tsx` that blocks zero, negative, and non-integer quantities.
+- [x] 11.7 Create `src/features/checkout/components/CheckoutPanel.tsx` that renders the quantity selector, checkout `Button`, and loading state during submission.
+- [x] 11.8 Create `src/features/checkout/components/FeedbackMessage.tsx` that renders recoverable messages for confirmed, pending, validation, auth, stock, duplicate, temporary failure, and internal error states using error codes from `APP_ERROR_CODES`.
+- [x] 11.9 Create `src/features/auth/hooks/useAuth.ts` for login state and token storage.
+- [x] 11.10 Create `src/features/auth/components/LoginForm.tsx` styled with Tailwind.
+- [x] 11.11 Create `src/routes/login.route.tsx` as the login page.
+- [x] 11.12 Refresh or offer to refresh product stock after stock-related checkout failures.
 
 ## 12. Web Order Status UI
 
-- [ ] 12.1 Create `src/features/order-status/hooks/useOrderStatus.ts` using `useAsync` to load order status by ID.
-- [ ] 12.2 Create `src/features/order-status/components/StatusBadge.tsx` using Tailwind utility classes for `PENDING_ERP`, `CONFIRMED`, `FAILED_TEMPORARY`, `EXPIRED`, `REJECTED_STOCK`, and `CANCELLED` — typed with `OrderStatus` from `@casecellshop/shared`.
-- [ ] 12.3 Create `src/features/order-status/components/OrderStatusView.tsx` that renders status, status message, timestamps, and the `StatusBadge`.
-- [ ] 12.4 Create `src/routes/order-status.route.tsx` as the order status page with not-found and generic error states.
-- [ ] 12.5 Verify failed web requests remain renderable and interactive where recovery is possible.
+- [x] 12.1 Create `src/features/order-status/hooks/useOrderStatus.ts` using `useAsync` to load order status by ID.
+- [x] 12.2 Create `src/features/order-status/components/StatusBadge.tsx` using Tailwind utility classes for `PENDING_ERP`, `CONFIRMED`, `FAILED_TEMPORARY`, `EXPIRED`, `REJECTED_STOCK`, and `CANCELLED` — typed with `OrderStatus` from `@casecellshop/shared`.
+- [x] 12.3 Create `src/features/order-status/components/OrderStatusView.tsx` that renders status, status message, timestamps, and the `StatusBadge`.
+- [x] 12.4 Create `src/routes/order-status.route.tsx` as the order status page with not-found and generic error states.
+- [x] 12.5 Verify failed web requests remain renderable and interactive where recovery is possible.
 
 ## 13. Frontend Tests
 
