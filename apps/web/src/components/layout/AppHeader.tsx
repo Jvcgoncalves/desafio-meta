@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Button } from "../ui/Button";
@@ -22,6 +22,19 @@ export function AppHeader({
 }: AppHeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isMobileMenuOpen]);
+
   const handleAuthAction = () => {
     setIsMobileMenuOpen(false);
 
@@ -34,8 +47,8 @@ export function AppHeader({
   };
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border-base bg-background/95 backdrop-blur">
-      <div className="mx-auto flex w-shell items-center gap-3 py-3">
+    <header className="sticky top-0 z-30 h-16 border-b border-border-base bg-background/95 backdrop-blur">
+      <div className="mx-auto flex w-shell items-center gap-3 py-3 max-md:justify-between">
         <Link
           to="/"
           className="text-3xl font-bold leading-none text-text-base md:text-2xl"
@@ -58,11 +71,11 @@ export function AppHeader({
           </Link>
         </nav>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="flex items-center gap-2 md:ml-auto ">
           <Button
             type="button"
             variant="secondary"
-            className="text-lg md:text-base"
+            className="text-lg md:text-base max-md:hidden"
             onClick={onOpenCart}
           >
             Carrinho
@@ -78,7 +91,7 @@ export function AppHeader({
           <Button
             type="button"
             variant="secondary"
-            className="text-lg md:text-base"
+            className="text-lg md:text-base max-md:hidden"
             onClick={handleAuthAction}
           >
             {isAuthenticated ? "Sair" : "Entrar"}
@@ -95,27 +108,48 @@ export function AppHeader({
       </div>
 
       {isMobileMenuOpen ? (
-        <div className="border-t border-border-base md:hidden">
-          <div className="mx-auto grid w-shell gap-2 py-3">
-            <Link
-              to="/itens"
-              className="text-lg font-semibold text-text-base"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Itens
-            </Link>
-            <Link
-              to="/pedidos"
-              className="text-lg font-semibold text-text-base"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Pedidos
-            </Link>
-            <div className="flex flex-wrap gap-2">
+        <>
+          <div className="fixed top-16 z-10 left-0 right-0 h-dvh bg-black/65 md:hidden">
+            
+          </div>
+          <div className="fixed top-16 inset-0 z-[60] md:hidden">
+            <div className="flex h-full flex-col">
+
+              <div className="mx-auto grid w-shell content-start gap-3 py-4 text-left">
               <Button
                 type="button"
                 variant="secondary"
-                className="text-lg"
+                overrideClass={true}
+                className="text-lg flex gap-2 items-center border-none bg-transparent text-white text-left mx-0 px-0"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onOpenCart();
+                }}
+              >
+                Carrinho
+                <span className="inline-flex min-w-6 items-center justify-center rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-white">
+                  {cartItemsCount}
+                </span>
+              </Button>
+              <Link
+                to="/itens"
+                className="text-left text-lg font-semibold text-white"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Itens
+              </Link>
+              <Link
+                to="/pedidos"
+                className="text-left text-lg font-semibold text-white"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Pedidos
+              </Link>
+              <Button
+                type="button"
+                variant="secondary"
+                overrideClass={true}
+                className="text-lg border-none bg-transparent text-white text-left mx-0 px-0"
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   handleAuthAction();
@@ -123,9 +157,10 @@ export function AppHeader({
               >
                 {isAuthenticated ? "Sair" : "Entrar"}
               </Button>
+              </div>
             </div>
           </div>
-        </div>
+        </>
       ) : null}
     </header>
   );

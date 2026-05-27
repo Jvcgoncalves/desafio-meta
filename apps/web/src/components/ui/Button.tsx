@@ -3,6 +3,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "danger";
   isLoading?: boolean;
+  overrideClass?: boolean;
   children: ReactNode;
 }
 
@@ -20,12 +21,13 @@ export function Button({
   isLoading = false,
   disabled,
   className = "",
+  overrideClass = false,
   children,
   ...props
 }: ButtonProps) {
   return (
     <button
-      className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-app border px-4 py-2 text-base font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 ${variants[variant]} ${className}`}
+      className={overrideClass ? className : `inline-flex min-h-10 items-center justify-center gap-2 rounded-app border px-4 py-2 text-base font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 ${variants[variant]} ${className}`}
       disabled={disabled || isLoading}
       {...props}
     >
